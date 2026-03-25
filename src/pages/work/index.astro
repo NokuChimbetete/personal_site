@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+
+// ✏️ Add all your real projects here
+const projects = [
+  {
+    title: 'Project Name',
+    category: 'Web Development',
+    tech: 'React, Node.js, PostgreSQL',
+    description: 'A short punchy description of what this does and why you built it.',
+    thumbnail: '/images/project-1.jpg',
+    url: 'https://github.com/',
+    year: '2024',
+  },
+  {
+    title: 'Another Project',
+    category: 'Tool / CLI',
+    tech: 'Python, FastAPI',
+    description: 'What problem does this solve? Keep it direct.',
+    thumbnail: '/images/project-2.jpg',
+    url: 'https://github.com/',
+    year: '2024',
+  },
+  {
+    title: 'A Third Thing',
+    category: 'Experiment',
+    tech: 'TypeScript, Canvas API',
+    description: 'Sometimes you build things just to see if you can.',
+    thumbnail: '/images/project-3.jpg',
+    url: 'https://github.com/',
+    year: '2023',
+  },
+];
+---
+
+<Base title="Work" description="Projects and dev work by Noku Chimbetete.">
+  <section class="section container" style="padding-top: calc(5rem + 4rem);">
+    <p class="section-label">Work</p>
+    <h1 class="section-title">Things I've built</h1>
+
+    <div class="cards-grid">
+      {projects.map((p, i) => (
+        <div class="project-card reveal" style={`transition-delay: ${i * 0.1}s`}>
+          <p class="project-card-category">{p.category} · {p.year}</p>
+          <h2 class="project-card-title">{p.title}</h2>
+          <ul class="project-card-tags">
+            {p.tech.split(', ').map((t) => (
+              <li class="project-card-tag">{t}</li>
+            ))}
+          </ul>
+          <p class="project-card-desc">{p.description}</p>
+          <a href={p.url} target="_blank" rel="noopener" class="project-card-link">
+            View project →
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <script>
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach((el) => observer.observe(el));
+  </script>
+</Base>

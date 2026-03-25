@@ -1,0 +1,226 @@
+---
+import Base from '../layouts/Base.astro';
+
+// ✏️ ADD YOUR REAL PROJECTS HERE
+// thumbnail should be a path to an image in /public/images/
+const featuredProjects = [
+  {
+    title: 'Project Name',
+    category: 'Web Development',
+    tech: 'React, Node.js, PostgreSQL',
+    description: 'A short punchy description of what this project does and why you built it. 2–3 sentences max.',
+    thumbnail: '/images/project-1.jpg',
+    url: 'https://github.com/',
+  },
+  {
+    title: 'Another Project',
+    category: 'Tool / CLI',
+    tech: 'Python, FastAPI',
+    description: 'What problem does this solve? Who is it for? Keep it honest and direct.',
+    thumbnail: '/images/project-2.jpg',
+    url: 'https://github.com/',
+  },
+  {
+    title: 'A Third Thing',
+    category: 'Experiment',
+    tech: 'TypeScript, Canvas API',
+    description: 'Sometimes you build things just to see if you can. This is one of those.',
+    thumbnail: '/images/project-3.jpg',
+    url: 'https://github.com/',
+  },
+];
+
+// ✏️ TYPEWRITER PHRASES — these cycle on the intro line
+// Each phrase completes: "I'm Noku, and I ___"
+const typedPhrases = [
+  'write code.',
+  'paint.',
+  'tell stories.',
+  'build things.',
+  'make art.',
+];
+---
+
+<Base>
+  <!-- ── Hero ── -->
+  <section class="hero container">
+
+    <div class="hero-top-row">
+      <!-- Portrait with video hover -->
+      <div class="hero-portrait-wrap fade-up" id="portrait-wrap">
+        <!-- Placeholder: replace portrait.jpg in /public/images/ to swap this out -->
+        <div class="hero-portrait-placeholder">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="28" r="16" fill="currentColor"/>
+            <ellipse cx="40" cy="68" rx="26" ry="18" fill="currentColor"/>
+          </svg>
+          <span>Your portrait</span>
+        </div>
+        <img src="/images/portrait.jpg" alt="Noku Chimbetete" id="portrait-img" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+        <video
+          id="portrait-video"
+          src="/videos/portrait-video.mp4"
+          muted loop playsinline preload="none"
+          style="z-index:2;"
+        ></video>
+        <div class="hero-portrait-ring"></div>
+      </div>
+
+      <div class="hero-text-block">
+        <h1 class="hero-name fade-up">
+          Noku<br /><em>Chimbetete</em>
+        </h1>
+
+        <!-- Typewriter line -->
+        <p class="hero-intro fade-up">
+          <span class="static">Hey there friend, I </span><span class="typed" id="typewriter"></span>
+        </p>
+
+        <!-- ✏️ Write your own bio here -->
+        <p class="hero-desc fade-up">
+          Your bio goes here — a sentence or two that captures who you are
+          across all three disciplines. Make it yours.
+        </p>
+
+        <div class="hero-links fade-up">
+          <a href="/work" class="hero-link">View work</a>
+          <a href="/blog" class="hero-link">Read writing</a>
+          <a href="https://github.com/YOUR_HANDLE" target="_blank" rel="noopener" class="hero-link">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Featured work ── -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label reveal">Selected work</p>
+      <h2 class="section-title reveal" style="transition-delay: 0.08s">What I've made</h2>
+
+      <div class="cards-grid">
+        {featuredProjects.map((p, i) => (
+          <div class="flip-card reveal" style={`transition-delay: ${i * 0.12}s`}>
+            <div class="flip-card-inner">
+              <!-- Front: thumbnail -->
+              <div class="flip-card-front">
+                <img src={p.thumbnail} alt={p.title} loading="lazy" />
+                <div class="flip-card-front-label">{p.title}</div>
+                <span class="flip-card-hint">tap to flip</span>
+              </div>
+              <!-- Back: details -->
+              <div class="flip-card-back">
+                <div>
+                  <p class="flip-card-back-category">{p.category}</p>
+                  <h3 class="flip-card-back-title">{p.title}</h3>
+                  <ul class="flip-card-back-tags">
+                    {p.tech.split(', ').map((t) => (
+                      <li class="flip-card-back-tag">{t}</li>
+                    ))}
+                  </ul>
+                  <p class="flip-card-back-desc">{p.description}</p>
+                </div>
+                <a href={p.url} target="_blank" rel="noopener" class="flip-card-back-link">
+                  View project →
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style="margin-top: 2.5rem;">
+        <a href="/work" class="hero-link">All work →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Writing preview ── -->
+  <section class="section" style="padding-top: clamp(3rem, 7vw, 5.5rem)">
+    <div class="container">
+      <p class="section-label reveal">Writing</p>
+      <h2 class="section-title reveal" style="transition-delay: 0.08s">Recent words</h2>
+
+      <div class="blog-list">
+        <!-- ✏️ These pull automatically once you add .md files to src/pages/blog/ -->
+        <a href="/blog/first-post" class="blog-item">
+          <span class="blog-item-title">Your first post title goes here</span>
+          <span class="blog-item-meta">Jan 2025</span>
+        </a>
+        <a href="#" class="blog-item">
+          <span class="blog-item-title">Another thing you wrote about</span>
+          <span class="blog-item-meta">Feb 2025</span>
+        </a>
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <a href="/blog" class="hero-link">All writing →</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+
+<script define:vars={{ typedPhrases }}>
+  // ── Typewriter effect ──
+  const el = document.getElementById('typewriter');
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let deleting = false;
+  const TYPE_SPEED = 80;
+  const DELETE_SPEED = 45;
+  const PAUSE_AFTER = 1800;
+  const PAUSE_BEFORE = 300;
+
+  function tick() {
+    const phrase = typedPhrases[phraseIndex];
+    if (!deleting) {
+      el.textContent = phrase.slice(0, charIndex + 1);
+      charIndex++;
+      if (charIndex === phrase.length) {
+        deleting = true;
+        setTimeout(tick, PAUSE_AFTER);
+        return;
+      }
+      setTimeout(tick, TYPE_SPEED);
+    } else {
+      el.textContent = phrase.slice(0, charIndex - 1);
+      charIndex--;
+      if (charIndex === 0) {
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % typedPhrases.length;
+        setTimeout(tick, PAUSE_BEFORE);
+        return;
+      }
+      setTimeout(tick, DELETE_SPEED);
+    }
+  }
+  setTimeout(tick, 900);
+
+  // ── Portrait video on hover ──
+  const wrap = document.getElementById('portrait-wrap');
+  const video = document.getElementById('portrait-video');
+  if (wrap && video) {
+    wrap.addEventListener('mouseenter', () => video.play().catch(() => {}));
+    wrap.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+  }
+
+  // ── Flip cards (click to flip) ──
+  document.querySelectorAll('.flip-card').forEach((card) => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.flip-card-back-link')) return;
+      card.classList.toggle('flipped');
+    });
+  });
+
+  // ── Scroll reveal ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach((el) => observer.observe(el));
+</script>
