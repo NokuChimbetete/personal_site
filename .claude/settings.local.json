@@ -7,7 +7,13 @@
       "mcp__Claude_Preview__preview_start",
       "Bash(node -e \"const p = require\\(''./node_modules/astro/package.json''\\); console.log\\(p.bin\\)\")",
       "Bash(\"C:/Users/nokuc/Desktop/nokuchimbetete/.gitignore\":*)",
-      "Bash(gh repo:*)"
+      "Bash(gh repo:*)",
+      "Bash(npm run:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }
