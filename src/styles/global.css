@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=DM+Serif+Display:ital@0;1&display=swap');
 
 :root {
-  --bg:        #180c02;
-  --bg2:       #0e0700;
-  --bg3:       #1e1106;
-  --surface:   #2a1600;
-  --border:    #3e2500;
+  --bg:        #000000;
+  --bg2:       #141210;
+  --bg3:       #1a1816;
+  --surface:   #1e1c1a;
+  --border:    #2c2824;
   --text:      #f0ece4;
   --muted:     #8a7e70;
   --accent:    #d4a853;
@@ -20,7 +20,6 @@ html { font-size: 16px; scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
-  background-image: radial-gradient(ellipse at 35% 0%, #2e1800 0%, transparent 60%);
   color: var(--text);
   font-family: var(--font);
   line-height: 1.7;
@@ -42,9 +41,9 @@ p { max-width: 66ch; }
 
 .container {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1260px;
   margin-inline: auto;
-  padding-inline: clamp(1.5rem, 5vw, 4rem);
+  padding-inline: clamp(0.75rem, 2.5vw, 2rem);
 }
 
 .section { padding-block: clamp(6rem, 14vw, 11rem); }
@@ -54,7 +53,7 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  padding: 1.5rem clamp(1.5rem, 5vw, 4rem);
+  padding: 1.5rem clamp(0.75rem, 2.5vw, 2rem);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -112,8 +111,8 @@ nav {
   padding-bottom: clamp(3rem, 8vw, 6rem);
   position: relative;
   overflow: hidden;
-  /* subtle enclosure */
-  background: rgba(22, 11, 2, 0.65);
+  /* subtle enclosure with warm gradient */
+  background: radial-gradient(ellipse at 35% 20%, #2e1800 0%, #0e0a06 70%);
   border: 1px solid rgba(212, 168, 83, 0.1);
   border-radius: 20px;
 }
@@ -292,12 +291,18 @@ nav {
 /* ── Flip cards (projects) ── */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+@media (max-width: 900px) {
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .cards-grid { grid-template-columns: 1fr; }
 }
 
 .flip-card {
-  height: 380px;
+  height: 456px;
   perspective: 1200px;
   cursor: pointer;
 }
@@ -307,7 +312,7 @@ nav {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.65s var(--ease);
+  transition: transform 0.45s ease-in-out;
   border-radius: 10px;
 }
 
@@ -520,17 +525,17 @@ footer {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.fade-up { animation: fadeUp 0.8s var(--ease) both; }
-.fade-up:nth-child(2) { animation-delay: 0.1s; }
-.fade-up:nth-child(3) { animation-delay: 0.2s; }
-.fade-up:nth-child(4) { animation-delay: 0.3s; }
-.fade-up:nth-child(5) { animation-delay: 0.4s; }
+.fade-up { animation: fadeUp 0.4s ease-out both; }
+.fade-up:nth-child(2) { animation-delay: 0.05s; }
+.fade-up:nth-child(3) { animation-delay: 0.1s; }
+.fade-up:nth-child(4) { animation-delay: 0.15s; }
+.fade-up:nth-child(5) { animation-delay: 0.2s; }
 
 /* ── Scroll reveal ── */
 .reveal {
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  transform: translateY(18px);
+  transition: opacity 0.35s ease-out, transform 0.35s ease-out;
 }
 .reveal.visible {
   opacity: 1;

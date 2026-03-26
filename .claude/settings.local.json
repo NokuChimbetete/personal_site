@@ -6,7 +6,8 @@
       "Bash(ls \"C:/Users/nokuc/Desktop/nokuchimbetete/node_modules/.bin/astro\"*)",
       "mcp__Claude_Preview__preview_start",
       "Bash(node -e \"const p = require\\(''./node_modules/astro/package.json''\\); console.log\\(p.bin\\)\")",
-      "Bash(\"C:/Users/nokuc/Desktop/nokuchimbetete/.gitignore\":*)"
+      "Bash(\"C:/Users/nokuc/Desktop/nokuchimbetete/.gitignore\":*)",
+      "Bash(gh repo:*)"
     ]
   }
 }
