@@ -94,11 +94,11 @@ const typedPhrases = [
   <!-- ── Featured work ── -->
   <section class="section" id="projects">
     <div class="container">
-      <h2 class="section-title reveal" style="transition-delay: 0.08s; color: var(--accent); text-align: center;">What I've made</h2>
+      <h2 class="section-title reveal" style="color: var(--accent); text-align: center;">What I've made</h2>
 
       <div class="cards-grid">
         {featuredProjects.map((p, i) => (
-          <div class="flip-card reveal" style={`transition-delay: ${i * 0.07}s`}>
+          <div class="flip-card reveal" style={`transition-delay: ${i * 0.04}s`}>
             <div class="flip-card-inner">
               <!-- Front: thumbnail -->
               <div class="flip-card-front">
@@ -133,7 +133,7 @@ const typedPhrases = [
   <!-- ── Writing preview ── -->
   <section class="section" id="writing" style="padding-top: clamp(3rem, 7vw, 5.5rem)">
     <div class="container">
-      <h2 class="section-title reveal" style="transition-delay: 0.08s; color: var(--accent); text-align: center;">Recent words</h2>
+      <h2 class="section-title reveal" style="color: var(--accent); text-align: center;">Recent words</h2>
 
       <div class="blog-list">
         <!-- ✏️ These pull automatically once you add .md files to src/pages/blog/ -->
@@ -213,6 +213,6 @@ const typedPhrases = [
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -10px 0px' });
+  }, { threshold: 0.01, rootMargin: '0px 0px 60px 0px' });
   revealEls.forEach((el) => observer.observe(el));
 </script>
