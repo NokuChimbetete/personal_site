@@ -92,14 +92,13 @@ const typedPhrases = [
   </section>
 
   <!-- ── Featured work ── -->
-  <section class="section">
+  <section class="section" id="projects">
     <div class="container">
-      <p class="section-label reveal">Selected work</p>
-      <h2 class="section-title reveal" style="transition-delay: 0.08s">What I've made</h2>
+      <h2 class="section-title reveal" style="transition-delay: 0.08s; color: var(--accent); text-align: center;">What I've made</h2>
 
       <div class="cards-grid">
         {featuredProjects.map((p, i) => (
-          <div class="flip-card reveal" style={`transition-delay: ${i * 0.12}s`}>
+          <div class="flip-card reveal" style={`transition-delay: ${i * 0.07}s`}>
             <div class="flip-card-inner">
               <!-- Front: thumbnail -->
               <div class="flip-card-front">
@@ -128,17 +127,13 @@ const typedPhrases = [
         ))}
       </div>
 
-      <div style="margin-top: 2.5rem;">
-        <a href="/work" class="hero-link">All work →</a>
-      </div>
     </div>
   </section>
 
   <!-- ── Writing preview ── -->
-  <section class="section" style="padding-top: clamp(3rem, 7vw, 5.5rem)">
+  <section class="section" id="writing" style="padding-top: clamp(3rem, 7vw, 5.5rem)">
     <div class="container">
-      <p class="section-label reveal">Writing</p>
-      <h2 class="section-title reveal" style="transition-delay: 0.08s">Recent words</h2>
+      <h2 class="section-title reveal" style="transition-delay: 0.08s; color: var(--accent); text-align: center;">Recent words</h2>
 
       <div class="blog-list">
         <!-- ✏️ These pull automatically once you add .md files to src/pages/blog/ -->
@@ -152,9 +147,6 @@ const typedPhrases = [
         </a>
       </div>
 
-      <div style="margin-top: 2rem;">
-        <a href="/blog" class="hero-link">All writing →</a>
-      </div>
     </div>
   </section>
 </Base>
@@ -221,6 +213,6 @@ const typedPhrases = [
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.08, rootMargin: '0px 0px -10px 0px' });
   revealEls.forEach((el) => observer.observe(el));
 </script>
