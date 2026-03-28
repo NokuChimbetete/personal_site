@@ -24,7 +24,7 @@ a, button, label, select, summary,
 [type="button"], [type="submit"], [type="reset"], [role="button"],
 .hero-portrait-wrap, .flip-card, .flip-card-back-link,
 .hero-link, .blog-item {
-  cursor: url('/cursors/pointer.svg') 10 5, pointer;
+  cursor: url('/cursors/pointer.svg') 8 6, pointer;
 }
 
 body {
@@ -184,7 +184,7 @@ nav {
   height: clamp(200px, 26vw, 320px);
   border-radius: 50%;
   overflow: hidden;
-  cursor: url('/cursors/pointer.svg') 10 5, pointer;
+  cursor: url('/cursors/pointer.svg') 8 6, pointer;
   flex-shrink: 0;
   align-self: center;
 }
@@ -316,7 +316,7 @@ nav {
 .flip-card {
   height: 456px;
   perspective: 1200px;
-  cursor: url('/cursors/pointer.svg') 10 5, pointer;
+  cursor: url('/cursors/pointer.svg') 8 6, pointer;
 }
 
 .flip-card-inner {
