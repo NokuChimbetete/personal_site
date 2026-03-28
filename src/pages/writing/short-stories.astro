@@ -1,0 +1,160 @@
+---
+import Base from '../../layouts/Base.astro';
+
+// ✏️ ADD YOUR SHORT STORIES HERE
+// Each story needs a title and slug. The slug becomes the anchor ID.
+const stories: { title: string; slug: string }[] = [
+  // Example:
+  // { title: 'The Title', slug: 'the-title' },
+];
+---
+
+<Base title="Short Stories" description="Short stories by Noku Chimbetete.">
+  <article class="writing-page">
+    <div class="container" style="max-width: 760px;">
+      <div style="margin-bottom: 3rem;">
+        <a href="/#writing" class="back-link">&larr; All writing</a>
+      </div>
+      <h1 class="page-heading">Short Stories</h1>
+
+      {stories.length > 0 ? (
+        <!-- Collapsible table of contents -->
+        <details class="toc" open>
+          <summary class="toc-toggle">
+            <span class="toc-label">Contents</span>
+            <svg class="toc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </summary>
+          <ol class="toc-list">
+            {stories.map((story) => (
+              <li>
+                <a href={`#${story.slug}`} class="toc-link">{story.title}</a>
+              </li>
+            ))}
+          </ol>
+        </details>
+      ) : (
+        <p class="coming-soon">Coming soon.</p>
+      )}
+    </div>
+  </article>
+</Base>
+
+<script>
+  // Smooth-scroll for TOC links
+  document.querySelectorAll('.toc-link').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = link.getAttribute('href')?.slice(1);
+      const target = id && document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', `#${id}`);
+      }
+    });
+  });
+</script>
+
+<style>
+.writing-page {
+  padding-top: calc(5rem + 4rem);
+  padding-bottom: 6rem;
+}
+
+.back-link {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
+
+.page-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 400;
+  color: var(--accent);
+  margin-bottom: 2.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.coming-soon {
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ── Table of contents ── */
+.toc {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0;
+  margin-bottom: 4rem;
+  overflow: hidden;
+}
+
+.toc-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.toc-toggle::-webkit-details-marker { display: none; }
+.toc-toggle::marker { display: none; content: ''; }
+
+.toc-label {
+  font-family: var(--font);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.toc-chevron {
+  color: var(--muted);
+  transition: transform 0.3s var(--ease);
+}
+.toc[open] .toc-chevron {
+  transform: rotate(180deg);
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0 1.5rem 1.25rem;
+  margin: 0;
+  counter-reset: toc;
+}
+.toc-list li {
+  counter-increment: toc;
+}
+.toc-list li + li {
+  margin-top: 0.5rem;
+}
+
+.toc-link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+.toc-link::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+.toc-link:hover {
+  color: var(--accent);
+}
+</style>

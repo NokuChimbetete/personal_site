@@ -1,0 +1,328 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const poems = [
+  {
+    title: 'Liberdade',
+    slug: 'liberdade',
+    epigraph: {
+      text: 'Well, there is one thing that nobody doubts: the ones to teach capoeira to us were the negro slaves that were brought from Angola.',
+      attribution: 'Mestre Pastinha',
+    },
+    sections: [
+      {
+        number: 'I',
+        lines: [
+          'Ax\u00e9!',
+          'A passionate chant breaks the stillness of night.',
+          'Miles away, there are ships,',
+          'and chains, and branding irons',
+          'gripped by men who bind to feel strong.',
+          'But here\u2014',
+          '',
+          'The voices of twenty capoeiristas crescendo',
+          'as two step to the roda\u2019s head. They squat',
+          'palms raised to their maestros,',
+          'and then extended to hold each other.',
+          'Locking eyes, acknowledging the indomitable humanity',
+          'in each other\u2019s souls',
+          '',
+          'they cartwheel into the game',
+          'Enclosed by the warmth of',
+          'Other unchained men; past, past and future.',
+          'This is the Ginga of the Full Moon.',
+        ],
+      },
+      {
+        number: 'II',
+        lines: [
+          '423 years later\u2026',
+          'I am panting for breath in a',
+          'well-lit capoeira studio. My gaze swings',
+          'across the room toward Caitlin\u2019s water bottle.',
+          'Wallop',
+          'Now it\u2019s back on Tiago.',
+          '',
+          'He\u2019s like me.',
+          'Unpredictable, unyielding, unbound.',
+          'The sweat deluging off him somehow',
+          'makes his skin radiate.',
+          '',
+          'His dreadlocks swing back',
+          'with each spinning kick that',
+          'he springs, and I (barely) slide under.',
+          'Each time we dance like this, I',
+          'am reminded that',
+          '',
+          'I am free.',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Skinny Dipping in the Pacific',
+    slug: 'skinny-dipping-in-the-pacific',
+    epigraph: null,
+    sections: [
+      {
+        number: null,
+        lines: [
+          'I am grateful for drunken foolishness;',
+          'because of it, I learned to love the sea.',
+          '',
+          'All my life, nakedness had a reputation',
+          'as the father of shame, mother of lewdness',
+          'distant cousin of insecurity and older',
+          'brother of embarrassment. When I saw nakedness, I saw',
+          'its entire family tree.',
+          '',
+          'But now,',
+          'I\u2019m staring at the silhouettes',
+          'of my friends running into the water with me.',
+          'My feet seem to bounce on the beach, as',
+          'soft, damp sand gives way to',
+          'cold, briny waves.',
+          'Then, their silhouettes turn to face me.',
+          '',
+          'The first rays of sunrise flush the sky',
+          'with just enough light for the three of us',
+          'to see each other smile, laugh,',
+          'spit out a mouthful of seawater,',
+          'and joke about how one vulnerable conversation',
+          'led to another, then another, and then',
+          'to this moment right now.',
+          '',
+          'I am grateful for drunken foolishness;',
+          'because of it, I learned to trust all of you.',
+        ],
+      },
+    ],
+  },
+];
+---
+
+<Base title="Poetry" description="Poems by Noku Chimbetete.">
+  <article class="writing-page">
+    <div class="container" style="max-width: 760px;">
+      <div style="margin-bottom: 3rem;">
+        <a href="/#writing" class="back-link">&larr; All writing</a>
+      </div>
+      <h1 class="page-heading">Poetry</h1>
+
+      <!-- Collapsible table of contents -->
+      <details class="toc" open>
+        <summary class="toc-toggle">
+          <span class="toc-label">Contents</span>
+          <svg class="toc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </summary>
+        <ol class="toc-list">
+          {poems.map((poem) => (
+            <li>
+              <a href={`#${poem.slug}`} class="toc-link">{poem.title}</a>
+            </li>
+          ))}
+        </ol>
+      </details>
+
+      {poems.map((poem, i) => (
+        <section id={poem.slug} class={`poem${i > 0 ? ' poem--next' : ''}`}>
+          <h2 class="poem-title">{poem.title}</h2>
+
+          {poem.epigraph && (
+            <blockquote class="poem-epigraph">
+              <p>{poem.epigraph.text}</p>
+              <cite>&mdash; {poem.epigraph.attribution}</cite>
+            </blockquote>
+          )}
+
+          {poem.sections.map((section) => (
+            <div class="poem-section">
+              {section.number && <p class="poem-section-number">{section.number}</p>}
+              <div class="poem-lines">
+                {section.lines.map((line) =>
+                  line === '' ? <br /> : <p class="poem-line">{line}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </section>
+      ))}
+    </div>
+  </article>
+</Base>
+
+<script>
+  // Smooth-scroll for TOC links
+  document.querySelectorAll('.toc-link').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = link.getAttribute('href')?.slice(1);
+      const target = id && document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', `#${id}`);
+      }
+    });
+  });
+</script>
+
+<style>
+.writing-page {
+  padding-top: calc(5rem + 4rem);
+  padding-bottom: 6rem;
+}
+
+.back-link {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
+
+.page-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 400;
+  color: var(--accent);
+  margin-bottom: 2.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+/* ── Table of contents ── */
+.toc {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0;
+  margin-bottom: 4rem;
+  overflow: hidden;
+}
+
+.toc-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.toc-toggle::-webkit-details-marker { display: none; }
+.toc-toggle::marker { display: none; content: ''; }
+
+.toc-label {
+  font-family: var(--font);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.toc-chevron {
+  color: var(--muted);
+  transition: transform 0.3s var(--ease);
+}
+.toc[open] .toc-chevron {
+  transform: rotate(180deg);
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0 1.5rem 1.25rem;
+  margin: 0;
+  counter-reset: toc;
+}
+.toc-list li {
+  counter-increment: toc;
+}
+.toc-list li + li {
+  margin-top: 0.5rem;
+}
+
+.toc-link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+.toc-link::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+.toc-link:hover {
+  color: var(--accent);
+}
+
+/* ── Individual poem ── */
+.poem {
+  margin-bottom: 0;
+  scroll-margin-top: 6rem;
+}
+.poem--next {
+  margin-top: 5rem;
+  padding-top: 5rem;
+  border-top: 1px solid var(--border);
+}
+
+.poem-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 400;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.poem-epigraph {
+  border-left: 2px solid var(--accent);
+  padding-left: 1.5rem;
+  margin-bottom: 2.5rem;
+  font-style: italic;
+  color: var(--muted);
+  max-width: 560px;
+}
+.poem-epigraph p {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+.poem-epigraph cite {
+  font-size: 0.85rem;
+  font-style: normal;
+  letter-spacing: 0.04em;
+}
+
+/* ── Poem sections ── */
+.poem-section {
+  margin-bottom: 2.5rem;
+}
+.poem-section-number {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+/* ── Lines ── */
+.poem-lines {
+  line-height: 1.8;
+}
+.poem-line {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 0;
+  line-height: 1.8;
+}
+</style>
