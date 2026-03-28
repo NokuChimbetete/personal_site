@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="Essays" description="Essays by Noku Chimbetete.">
+  <article class="writing-page">
+    <div class="container" style="max-width: 760px;">
+      <div style="margin-bottom: 3rem;">
+        <a href="/#writing" class="back-link">&larr; All writing</a>
+      </div>
+      <h1 class="page-heading">Essays</h1>
+      <p class="coming-soon">Coming soon.</p>
+    </div>
+  </article>
+</Base>
+
+<style>
+.writing-page {
+  padding-top: calc(5rem + 4rem);
+  padding-bottom: 6rem;
+}
+
+.back-link {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
+
+.page-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 400;
+  color: var(--accent);
+  margin-bottom: 2rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.coming-soon {
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+</style>
