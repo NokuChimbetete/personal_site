@@ -5,28 +5,31 @@ import Base from '../layouts/Base.astro';
 // thumbnail should be a path to an image in /public/images/
 const featuredProjects = [
   {
-    title: 'Project Name',
-    category: 'Web Development',
-    tech: 'React, Node.js, PostgreSQL',
-    description: 'A short punchy description of what this project does and why you built it. 2–3 sentences max.',
+    title: 'Puumba',
+    category: 'Hackathon Winner',
+    tech: 'TypeScript, LLM integration, Next.js',
+    description: 'Duolingo for learning Vibe Coding. My friend and I won the 2025 Minna Hackathon (Tokyo) by creating a platform that gamifies learning to vibe code by pulling a code editor (Trae) into a cartoony UI that guides beginners through useful vibecoding tasks.',
     thumbnail: '/images/project-1.jpg',
-    url: 'https://github.com/',
+    url: '#',
+    linkText: 'View Repo',
   },
   {
-    title: 'Another Project',
-    category: 'Tool / CLI',
-    tech: 'Python, FastAPI',
-    description: 'What problem does this solve? Who is it for? Keep it honest and direct.',
-    thumbnail: '/images/project-2.jpg',
-    url: 'https://github.com/',
+    title: 'Minerva Vibe Check',
+    category: 'Internal Tool',
+    tech: 'JavaScript, Firebase',
+    description: 'A real world sorting hat. I helped develop an internal tool that my university uses to sort incoming first years into "legacy" groups based on a hilarious personality quiz. My primary contribution was the algorithms that sort students, considering the global distribution between the 25 legacies and the answers to the 25 question survey.',
+    thumbnail: '/images/project-2.png',
+    url: '#',
+    linkText: 'View Demo',
   },
   {
-    title: 'A Third Thing',
-    category: 'Experiment',
-    tech: 'TypeScript, Canvas API',
-    description: 'Sometimes you build things just to see if you can. This is one of those.',
-    thumbnail: '/images/project-3.jpg',
-    url: 'https://github.com/',
+    title: 'ByteFriend',
+    category: 'AI Agent',
+    tech: 'Supabase, Node.js',
+    description: 'Your first friend in Japan. My friend and I made an AI agent to help tourists and new residents in Japan navigate the immense bureaucratic procedures involved in creating their new lives.',
+    thumbnail: '/images/project-3.png',
+    url: '#',
+    linkText: 'View Demo',
   },
 ];
 
@@ -141,7 +144,7 @@ const typedPhrases = [
                   <p class="flip-card-back-desc">{p.description}</p>
                 </div>
                 <a href={p.url} target="_blank" rel="noopener" class="flip-card-back-link">
-                  View project →
+                  {p.linkText || 'View project'} →
                 </a>
               </div>
             </div>
