@@ -30,6 +30,22 @@ const featuredProjects = [
   },
 ];
 
+// ✏️ PORTRAIT CAROUSEL — alternating photos & videos
+// Sequence: photo-1 → hover → video-1 → photo-2 → hover → video-2 → … → last photo → wraps back
+// Rule: always one more photo than videos (odd number of media elements)
+// To add more: drop files in public/images/ and public/videos/ with the next number, then add paths here.
+const portraitPhotos = [
+  '/images/portrait-1.jpg',
+  '/images/portrait-2.jpg',
+  '/images/portrait-3.jpg',
+  '/images/portrait-4.jpg',
+];
+const portraitVideos = [
+  '/videos/portrait-1.mp4',
+  '/videos/portrait-2.mp4',
+  '/videos/portrait-3.mp4',
+];
+
 // ✏️ TYPEWRITER PHRASES — these cycle on the intro line
 // Each phrase completes: "I'm Noku, and I ___"
 const typedPhrases = [
@@ -46,23 +62,29 @@ const typedPhrases = [
   <section class="hero container">
 
     <div class="hero-top-row">
-      <!-- Portrait with video hover -->
+      <!-- Portrait carousel: alternating photos & videos on hover -->
       <div class="hero-portrait-wrap fade-up" id="portrait-wrap">
-        <!-- Placeholder: replace portrait.jpg in /public/images/ to swap this out -->
-        <div class="hero-portrait-placeholder">
-          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="40" cy="28" r="16" fill="currentColor"/>
-            <ellipse cx="40" cy="68" rx="26" ry="18" fill="currentColor"/>
-          </svg>
-          <span>Your portrait</span>
-        </div>
-        <img src="/images/portrait.jpg" alt="Noku Chimbetete" id="portrait-img" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;border-radius:50%;" />
-        <video
-          id="portrait-video"
-          src="/videos/portrait-video.mp4"
-          muted loop playsinline preload="none"
-          style="z-index:2;"
-        ></video>
+        {/* Stack all photos — first one starts active */}
+        {portraitPhotos.map((src, i) => (
+          <img
+            class={`portrait-media portrait-photo${i === 0 ? ' active' : ''}`}
+            src={src}
+            alt={`Noku Chimbetete — photo ${i + 1}`}
+            draggable="false"
+          />
+        ))}
+
+        {/* Stack all videos — none active initially, first one eager-preloaded */}
+        {portraitVideos.map((src, i) => (
+          <video
+            class="portrait-media portrait-video"
+            src={src}
+            muted
+            playsinline
+            preload={i === 0 ? 'auto' : 'metadata'}
+          />
+        ))}
+
         <div class="hero-portrait-ring"></div>
       </div>
 
@@ -188,13 +210,109 @@ const typedPhrases = [
   }
   setTimeout(tick, 900);
 
-  // ── Portrait video on hover ──
-  const wrap = document.getElementById('portrait-wrap');
-  const video = document.getElementById('portrait-video');
-  if (wrap && video) {
-    wrap.addEventListener('mouseenter', () => video.play().catch(() => {}));
-    wrap.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
-  }
+  // ── Portrait carousel state machine ──
+  // Sequence: photo₀ → video₀ → photo₁ → video₁ → … → photoₙ → wrap
+  // Even steps = photos, odd steps = videos.
+  (() => {
+    const wrap = document.getElementById('portrait-wrap');
+    if (!wrap) return;
+
+    const photos = Array.from(wrap.querySelectorAll('.portrait-photo'));
+    const videos = Array.from(wrap.querySelectorAll('.portrait-video'));
+    const numPhotos = photos.length;
+    const numVideos = videos.length;
+    const allMedia = [...photos, ...videos];
+
+    let step = 0;          // current position in the sequence
+    let hovering = false;  // is cursor currently over the portrait?
+
+    // ── helpers ──
+    const photoAt  = (s) => photos[s >> 1];
+    const videoAt  = (s) => videos[(s - 1) >> 1];
+    const isPhoto  = (s) => s % 2 === 0;
+    const lastStep = 2 * numVideos;  // index of the last photo (no video after it)
+
+    function show(step) {
+      // Deactivate everything, then activate the one element for this step
+      allMedia.forEach(el => el.classList.remove('active'));
+      const target = isPhoto(step) ? photoAt(step) : videoAt(step);
+      if (target) target.classList.add('active');
+    }
+
+    // Eagerly preload the next video so it's buffered before the user hovers
+    function preloadNext(currentVideoIndex) {
+      const next = currentVideoIndex + 1;
+      if (next < numVideos && videos[next].preload !== 'auto') {
+        videos[next].preload = 'auto';
+        videos[next].load();   // start buffering now
+      }
+    }
+
+    // ── transitions ──
+    function enterHover() {
+      if (!isPhoto(step)) return; // already on a video, ignore
+
+      if (step < lastStep) {
+        // Advance from photo → its paired video
+        step++;
+        show(step);
+        const vid = videoAt(step);
+        vid.currentTime = 0;
+        vid.play().catch(() => {});
+        preloadNext((step - 1) >> 1);
+      } else {
+        // Last photo reached — wrap back to photo₀
+        step = 0;
+        show(step);
+        // If still hovering, start the first video after the crossfade settles
+        setTimeout(() => {
+          if (hovering && step === 0) enterHover();
+        }, 500);
+      }
+    }
+
+    function leaveHover() {
+      if (isPhoto(step)) return; // already on a photo, nothing to do
+
+      // Pause current video, advance to the next photo
+      const vid = videoAt(step);
+      vid.pause();
+      vid.currentTime = 0;
+      step++;
+      if (step > lastStep) step = 0;
+      show(step);
+    }
+
+    // ── event wiring ──
+    wrap.addEventListener('mouseenter', () => { hovering = true;  enterHover(); });
+    wrap.addEventListener('mouseleave', () => { hovering = false; leaveHover(); });
+
+    // Mobile: tap toggles between photo → video and video → next photo
+    wrap.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (isPhoto(step)) { hovering = true;  enterHover(); }
+      else               { hovering = false; leaveHover(); }
+    }, { passive: false });
+
+    // When a video finishes naturally → advance to next photo, auto-chain if hovering
+    videos.forEach((vid, i) => {
+      vid.addEventListener('ended', () => {
+        const expectedStep = 2 * i + 1;
+        if (step !== expectedStep) return; // stale event
+
+        step = expectedStep + 1;
+        if (step > lastStep) step = 0;
+        show(step);
+
+        // If cursor is still over the portrait, auto-play the next video
+        if (hovering) enterHover();
+      });
+    });
+
+    // Preload all photos immediately (they're tiny) + start buffering video₀
+    photos.forEach(img => { img.loading = 'eager'; });
+    if (videos[0]) { videos[0].preload = 'auto'; videos[0].load(); }
+  })();
 
   // ── Flip cards (click to flip) ──
   document.querySelectorAll('.flip-card').forEach((card) => {

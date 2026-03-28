@@ -18,6 +18,15 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; cursor: url('/cursors/arrow.svg') 0 0, auto; }
 
+/* Custom pointer (click) cursor — replaces the default pointing-finger
+   on every interactive / clickable element site-wide */
+a, button, label, select, summary,
+[type="button"], [type="submit"], [type="reset"], [role="button"],
+.hero-portrait-wrap, .flip-card, .flip-card-back-link,
+.hero-link, .blog-item {
+  cursor: url('/cursors/pointer.svg') 10 5, pointer;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -175,25 +184,27 @@ nav {
   height: clamp(200px, 26vw, 320px);
   border-radius: 50%;
   overflow: hidden;
-  cursor: pointer;
+  cursor: url('/cursors/pointer.svg') 10 5, pointer;
   flex-shrink: 0;
   align-self: center;
 }
 
-.hero-portrait-wrap img,
-.hero-portrait-wrap video {
+/* All portrait media (photos + videos) are stacked absolutely.
+   Visibility is controlled entirely via JS — no :hover CSS rules,
+   so the state machine stays in full control. */
+.portrait-media {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  transition: opacity 0.4s var(--ease);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+  z-index: 1;
+  will-change: opacity;          /* promote to own layer for instant GPU compositing */
 }
-
-.hero-portrait-wrap video { opacity: 0; }
-.hero-portrait-wrap:hover img { opacity: 0; }
-.hero-portrait-wrap:hover video { opacity: 1; }
+.portrait-media.active { opacity: 1; }
 
 .hero-portrait-ring {
   position: absolute;
@@ -202,6 +213,7 @@ nav {
   border: 2px solid var(--accent);
   opacity: 0.5;
   pointer-events: none;
+  z-index: 2;
 }
 
 .hero-portrait-placeholder {
@@ -304,7 +316,7 @@ nav {
 .flip-card {
   height: 456px;
   perspective: 1200px;
-  cursor: pointer;
+  cursor: url('/cursors/pointer.svg') 10 5, pointer;
 }
 
 .flip-card-inner {
