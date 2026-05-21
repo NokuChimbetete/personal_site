@@ -455,6 +455,10 @@ nav {
   color: var(--bg);
 }
 
+/* TEMPORARY: hide project CTA buttons until real demo/repo links are ready.
+   Delete (or comment out) the rule below to re-enable VIEW REPO / VIEW DEMO buttons. */
+.flip-card-back-link { display: none; }
+
 /* ── Blog list ── */
 .blog-list { display: flex; flex-direction: column; }
 
