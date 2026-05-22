@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 
 // ✏️ ADD YOUR REAL PROJECTS HERE
-// thumbnail should be a path to an image in /public/images/
 const featuredProjects = [
   {
     title: 'Puumba',
@@ -33,24 +32,7 @@ const featuredProjects = [
   },
 ];
 
-// ✏️ PORTRAIT CAROUSEL — alternating photos & videos
-// Sequence: photo-1 → hover → video-1 → photo-2 → hover → video-2 → … → last photo → wraps back
-// Rule: always one more photo than videos (odd number of media elements)
-// To add more: drop files in public/images/ and public/videos/ with the next number, then add paths here.
-const portraitPhotos = [
-  '/images/portrait-1.jpg',
-  '/images/portrait-2.jpg',
-  '/images/portrait-3.jpg',
-  '/images/portrait-4.jpg',
-];
-const portraitVideos = [
-  '/videos/portrait-1.mp4',
-  '/videos/portrait-2.mp4',
-  '/videos/portrait-3.mp4',
-];
-
-// ✏️ TYPEWRITER PHRASES — these cycle on the intro line
-// Each phrase completes: "I'm Noku, and I ___"
+// ✏️ TYPEWRITER PHRASES — these cycle on the intro lead line
 const typedPhrases = [
   'design great products.',
   'write poetry.',
@@ -61,328 +43,122 @@ const typedPhrases = [
 ---
 
 <Base>
-  <!-- ── Hero ── -->
-  <section class="hero container">
+  <!-- ── Intro ── -->
+  <section id="intro" class="content-section">
+    <p class="intro-lead">
+      <span class="intro-lead-static">Hey there friend, I </span><span class="intro-lead-typed" id="typewriter"></span>
+    </p>
 
-    <div class="hero-top-row">
-      <!-- Portrait carousel: alternating photos & videos on hover -->
-      <div class="hero-portrait-wrap fade-up" id="portrait-wrap">
-        {/* Stack all photos — first one starts active */}
-        {portraitPhotos.map((src, i) => (
-          <img
-            class={`portrait-media portrait-photo${i === 0 ? ' active' : ''}`}
-            src={src}
-            alt={`Noku Chimbetete — photo ${i + 1}`}
-            draggable="false"
-          />
-        ))}
+    <p class="intro-bio">
+      Thanks for stopping by. I love talking to strangers :)
+      <br />
+      (We should have hibiscus tea sometime)
+    </p>
 
-        {/* Stack all videos — none active initially, first one eager-preloaded */}
-        {portraitVideos.map((src, i) => (
-          <video
-            class="portrait-media portrait-video"
-            src={src}
-            muted
-            playsinline
-            preload={i === 0 ? 'auto' : 'metadata'}
-          />
-        ))}
-
-        <div class="hero-portrait-ring"></div>
-      </div>
-
-      <div class="hero-text-block">
-        <h1 class="hero-name fade-up">
-          Noku<br /><em>Chimbetete</em>
-        </h1>
-
-        <!-- Typewriter line -->
-        <p class="hero-intro fade-up">
-          <span class="static">Hey there friend, I </span><span class="typed" id="typewriter"></span>
-        </p>
-
-        <!-- ✏️ Write your own bio here -->
-        <p class="hero-desc fade-up">
-          Thanks for stopping by. I love talking to strangers :) 
-          <br/>
-          (We should have hibiscus tea sometime)
-
-        </p>
-
-        <div class="hero-links fade-up">
-          <a href="#projects" class="hero-link">View work</a>
-          <button type="button" class="hero-link" id="resume-open" aria-haspopup="dialog">Resume</button>
-          <a href="#writing" class="hero-link">Read writing</a>
-          <a href="https://github.com/NokuChimbetete/" target="_blank" rel="noopener" class="hero-link">GitHub</a>
-        </div>
-      </div>
-    </div>
+    <p class="intro-cta">Open to thoughtful conversations with:</p>
+    <ul class="intro-list">
+      <li>Designers, engineers and founders interested in building an abundant future for humanity.</li>
+      <li>Creatives with cool stories to share.</li>
+    </ul>
   </section>
 
-  <!-- ── Featured work ── -->
-  <section class="section" id="projects" style="padding-block-start: clamp(3rem, 7vw, 5.5rem); padding-block-end: clamp(3rem, 7vw, 5.5rem);">
-    <div class="container">
-      <h2 class="section-title reveal" style="color: var(--accent); text-align: center;">What I've made</h2>
+  <!-- ── Projects ── -->
+  <section id="projects" class="content-section">
+    <h2 class="content-section-title">Projects</h2>
 
-      <div class="cards-grid">
-        {featuredProjects.map((p, i) => (
-          <div class="flip-card reveal" style={`transition-delay: ${i * 0.04}s`}>
+    <div class="projects-stack">
+      {featuredProjects.map((p, i) => (
+        <article class="project-item reveal" style={`transition-delay: ${i * 0.04}s`}>
+          <div class="flip-card">
             <div class="flip-card-inner">
-              <!-- Front: thumbnail -->
+              <!-- Front: thumbnail + tap-to-see-demo hint -->
               <div class="flip-card-front">
                 <img src={p.thumbnail} alt={p.title} loading="lazy" />
                 <div class="flip-card-front-label">{p.title}</div>
-                <span class="flip-card-hint">tap to flip</span>
+                <span class="flip-card-hint">tap to see demo</span>
               </div>
-              <!-- Back: details -->
+              <!-- Back: reserved for embedded demo video (coming soon) -->
               <div class="flip-card-back">
-                <div>
-                  <p class="flip-card-back-category">{p.category}</p>
-                  <h3 class="flip-card-back-title">{p.title}</h3>
-                  <ul class="flip-card-back-tags">
-                    {p.tech.split(', ').map((t) => (
-                      <li class="flip-card-back-tag">{t}</li>
-                    ))}
-                  </ul>
-                  <p class="flip-card-back-desc">{p.description}</p>
+                <div class="flip-card-back-placeholder">
+                  <span class="flip-card-back-placeholder-label">Demo video</span>
+                  <span class="flip-card-back-placeholder-sub">Coming soon</span>
                 </div>
-                <a href={p.url} target="_blank" rel="noopener" class="flip-card-back-link">
-                  {p.linkText || 'View project'} →
-                </a>
               </div>
             </div>
           </div>
-        ))}
-      </div>
 
+          <!-- Project details (visible below card, no click needed) -->
+          <div class="project-details">
+            <p class="project-category">{p.category}</p>
+            <h3 class="project-title">{p.title}</h3>
+            <ul class="project-tags">
+              {p.tech.split(', ').map((t) => (
+                <li class="project-tag">{t}</li>
+              ))}
+            </ul>
+            <p class="project-desc">{p.description}</p>
+            <a href={p.url} target="_blank" rel="noopener" class="project-link">
+              {p.linkText || 'View project'} →
+            </a>
+          </div>
+        </article>
+      ))}
     </div>
   </section>
 
-  <!-- ── Writing preview ── -->
-  <section class="section" id="writing" style="padding-top: clamp(1.5rem, 3.5vw, 2.75rem)">
-    <div class="container">
-      <h2 class="section-title reveal" style="color: var(--accent); text-align: center;">Recent words</h2>
+  <!-- ── Writing ── -->
+  <section id="writing" class="content-section">
+    <h2 class="content-section-title">Writing</h2>
 
-      <div class="blog-list">
-        <a href="/writing/poetry" class="blog-item">
-          <span class="blog-item-title">Poetry</span>
-        </a>
-        <a href="/writing/short-stories" class="blog-item">
-          <span class="blog-item-title">Short Stories</span>
-        </a>
-        <a href="/writing/essays" class="blog-item">
-          <span class="blog-item-title">Essays</span>
-        </a>
-      </div>
-
+    <div class="blog-list">
+      <a href="/writing/poetry" class="blog-item">
+        <span class="blog-item-title">Poetry</span>
+      </a>
+      <a href="/writing/short-stories" class="blog-item">
+        <span class="blog-item-title">Short Stories</span>
+      </a>
+      <a href="/writing/essays" class="blog-item">
+        <span class="blog-item-title">Essays</span>
+      </a>
     </div>
   </section>
-
-  <!-- ── Resume Modal ── -->
-  <div class="resume-modal" id="resume-modal" role="dialog" aria-modal="true" aria-label="Resume" hidden>
-    <div class="resume-modal-backdrop" data-resume-close></div>
-    <div class="resume-modal-content" role="document">
-      <div class="resume-modal-toolbar">
-        <span class="resume-modal-title">Resume — Noku Chimbetete</span>
-        <div class="resume-modal-actions">
-          <a href="/Noku_Chimbetete_Resume.pdf" download class="resume-modal-btn">Download PDF</a>
-          <button type="button" class="resume-modal-btn resume-modal-close" data-resume-close aria-label="Close">&times;</button>
-        </div>
-      </div>
-      <iframe
-        class="resume-modal-frame"
-        src="/Noku_Chimbetete_Resume.pdf#toolbar=1&view=FitH"
-        title="Noku Chimbetete Resume"
-        loading="lazy"
-      ></iframe>
-    </div>
-  </div>
 </Base>
-
 
 <script define:vars={{ typedPhrases }}>
   // ── Typewriter effect ──
   const el = document.getElementById('typewriter');
-  let phraseIndex = 0;
-  let charIndex = 0;
-  let deleting = false;
-  const TYPE_SPEED = 80;
-  const DELETE_SPEED = 45;
-  const PAUSE_AFTER = 1800;
-  const PAUSE_BEFORE = 300;
+  if (el) {
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    const TYPE_SPEED = 80;
+    const DELETE_SPEED = 45;
+    const PAUSE_AFTER = 1800;
+    const PAUSE_BEFORE = 300;
 
-  function tick() {
-    const phrase = typedPhrases[phraseIndex];
-    if (!deleting) {
-      el.textContent = phrase.slice(0, charIndex + 1);
-      charIndex++;
-      if (charIndex === phrase.length) {
-        deleting = true;
-        setTimeout(tick, PAUSE_AFTER);
-        return;
-      }
-      setTimeout(tick, TYPE_SPEED);
-    } else {
-      el.textContent = phrase.slice(0, charIndex - 1);
-      charIndex--;
-      if (charIndex === 0) {
-        deleting = false;
-        phraseIndex = (phraseIndex + 1) % typedPhrases.length;
-        setTimeout(tick, PAUSE_BEFORE);
-        return;
-      }
-      setTimeout(tick, DELETE_SPEED);
-    }
-  }
-  setTimeout(tick, 900);
-
-  // ── Portrait carousel state machine ──
-  // Sequence: photo₀ → video₀ → photo₁ → video₁ → … → photoₙ → wrap
-  // Even steps = photos, odd steps = videos.
-  (() => {
-    const wrap = document.getElementById('portrait-wrap');
-    if (!wrap) return;
-
-    const photos = Array.from(wrap.querySelectorAll('.portrait-photo'));
-    const videos = Array.from(wrap.querySelectorAll('.portrait-video'));
-    const numPhotos = photos.length;
-    const numVideos = videos.length;
-    const allMedia = [...photos, ...videos];
-
-    let step = 0;          // current position in the sequence
-    let hovering = false;  // is cursor currently over the portrait?
-
-    // ── helpers ──
-    const photoAt  = (s) => photos[s >> 1];
-    const videoAt  = (s) => videos[(s - 1) >> 1];
-    const isPhoto  = (s) => s % 2 === 0;
-    const lastStep = 2 * numVideos;  // index of the last photo (no video after it)
-
-    function show(step) {
-      // Deactivate everything, then activate the one element for this step
-      allMedia.forEach(el => el.classList.remove('active'));
-      const target = isPhoto(step) ? photoAt(step) : videoAt(step);
-      if (target) target.classList.add('active');
-    }
-
-    // Eagerly preload the next video so it's buffered before the user hovers
-    function preloadNext(currentVideoIndex) {
-      const next = currentVideoIndex + 1;
-      if (next < numVideos && videos[next].preload !== 'auto') {
-        videos[next].preload = 'auto';
-        videos[next].load();   // start buffering now
-      }
-    }
-
-    // ── transitions ──
-    function enterHover() {
-      if (!isPhoto(step)) return; // already on a video, ignore
-
-      if (step < lastStep) {
-        // Advance from photo → its paired video
-        step++;
-        show(step);
-        const vid = videoAt(step);
-        vid.currentTime = 0;
-        vid.play().catch(() => {});
-        preloadNext((step - 1) >> 1);
+    function tick() {
+      const phrase = typedPhrases[phraseIndex];
+      if (!deleting) {
+        el.textContent = phrase.slice(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === phrase.length) {
+          deleting = true;
+          setTimeout(tick, PAUSE_AFTER);
+          return;
+        }
+        setTimeout(tick, TYPE_SPEED);
       } else {
-        // Last photo reached — wrap back to photo₀
-        step = 0;
-        show(step);
-        // If still hovering, start the first video after the crossfade settles
-        setTimeout(() => {
-          if (hovering && step === 0) enterHover();
-        }, 500);
+        el.textContent = phrase.slice(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % typedPhrases.length;
+          setTimeout(tick, PAUSE_BEFORE);
+          return;
+        }
+        setTimeout(tick, DELETE_SPEED);
       }
     }
-
-    function leaveHover() {
-      if (isPhoto(step)) return; // already on a photo, nothing to do
-
-      // Pause current video, advance to the next photo
-      const vid = videoAt(step);
-      vid.pause();
-      vid.currentTime = 0;
-      step++;
-      if (step > lastStep) step = 0;
-      show(step);
-    }
-
-    // ── event wiring ──
-    wrap.addEventListener('mouseenter', () => { hovering = true;  enterHover(); });
-    wrap.addEventListener('mouseleave', () => { hovering = false; leaveHover(); });
-
-    // Mobile: tap toggles between photo → video and video → next photo
-    wrap.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      if (isPhoto(step)) { hovering = true;  enterHover(); }
-      else               { hovering = false; leaveHover(); }
-    }, { passive: false });
-
-    // When a video finishes naturally → advance to next photo, auto-chain if hovering
-    videos.forEach((vid, i) => {
-      vid.addEventListener('ended', () => {
-        const expectedStep = 2 * i + 1;
-        if (step !== expectedStep) return; // stale event
-
-        step = expectedStep + 1;
-        if (step > lastStep) step = 0;
-        show(step);
-
-        // If cursor is still over the portrait, auto-play the next video
-        if (hovering) enterHover();
-      });
-    });
-
-    // Preload all photos immediately (they're tiny) + start buffering video₀
-    photos.forEach(img => { img.loading = 'eager'; });
-    if (videos[0]) { videos[0].preload = 'auto'; videos[0].load(); }
-  })();
-
-  // ── Flip cards (click to flip) ──
-  document.querySelectorAll('.flip-card').forEach((card) => {
-    card.addEventListener('click', (e) => {
-      if (e.target.closest('.flip-card-back-link')) return;
-      card.classList.toggle('flipped');
-    });
-  });
-
-  // ── Scroll reveal ──
-  const revealEls = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.01, rootMargin: '0px 0px 60px 0px' });
-  revealEls.forEach((el) => observer.observe(el));
-
-  // ── Resume modal ──
-  (() => {
-    const modal = document.getElementById('resume-modal');
-    const openBtn = document.getElementById('resume-open');
-    if (!modal || !openBtn) return;
-
-    const open = () => {
-      modal.hidden = false;
-      requestAnimationFrame(() => modal.classList.add('open'));
-      document.body.style.overflow = 'hidden';
-    };
-    const close = () => {
-      modal.classList.remove('open');
-      document.body.style.overflow = '';
-      setTimeout(() => { modal.hidden = true; }, 250);
-    };
-
-    openBtn.addEventListener('click', open);
-    modal.querySelectorAll('[data-resume-close]').forEach((el) => {
-      el.addEventListener('click', close);
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !modal.hidden) close();
-    });
-  })();
+    setTimeout(tick, 900);
+  }
 </script>
