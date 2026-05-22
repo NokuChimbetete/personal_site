@@ -105,7 +105,14 @@ const portraitVideos = [
           <!-- Action pills (read writing + view resume) -->
           <div class="sidebar-pills">
             <a href="#writing" class="sidebar-pill">Read writing</a>
-            <button type="button" class="sidebar-pill" id="resume-open" aria-haspopup="dialog">View resume</button>
+            <button
+              type="button"
+              class="sidebar-pill"
+              id="resume-open"
+              aria-haspopup="dialog"
+              data-pdf-src="/Noku_Chimbetete_Resume.pdf"
+              data-pdf-title="Resume — Noku Chimbetete"
+            >View resume</button>
           </div>
 
           <!-- Social icons -->
@@ -161,21 +168,22 @@ const portraitVideos = [
       </main>
     </div>
 
-    <!-- ── Resume Modal ── -->
-    <div class="resume-modal" id="resume-modal" role="dialog" aria-modal="true" aria-label="Resume" hidden>
-      <div class="resume-modal-backdrop" data-resume-close></div>
-      <div class="resume-modal-content" role="document">
-        <div class="resume-modal-toolbar">
-          <span class="resume-modal-title">Resume — Noku Chimbetete</span>
-          <div class="resume-modal-actions">
-            <a href="/Noku_Chimbetete_Resume.pdf" download class="resume-modal-btn">Download PDF</a>
-            <button type="button" class="resume-modal-btn resume-modal-close" data-resume-close aria-label="Close">&times;</button>
+    <!-- ── Reusable PDF Modal (resume + short stories + future PDFs) ── -->
+    <!-- Triggered by any element with [data-pdf-src] (and optional [data-pdf-title]). -->
+    <div class="pdf-modal" id="pdf-modal" role="dialog" aria-modal="true" aria-label="PDF viewer" hidden>
+      <div class="pdf-modal-backdrop" data-pdf-modal-close></div>
+      <div class="pdf-modal-content" role="document">
+        <div class="pdf-modal-toolbar">
+          <span class="pdf-modal-title" id="pdf-modal-title">PDF</span>
+          <div class="pdf-modal-actions">
+            <a href="#" download class="pdf-modal-btn" id="pdf-modal-download">Download PDF</a>
+            <button type="button" class="pdf-modal-btn pdf-modal-close" data-pdf-modal-close aria-label="Close">&times;</button>
           </div>
         </div>
         <iframe
-          class="resume-modal-frame"
-          src="/Noku_Chimbetete_Resume.pdf#toolbar=1&view=FitH"
-          title="Noku Chimbetete Resume"
+          class="pdf-modal-frame"
+          id="pdf-modal-frame"
+          title="PDF viewer"
           loading="lazy"
         ></iframe>
       </div>
@@ -421,13 +429,20 @@ const portraitVideos = [
         });
       })();
 
-      // ── Resume modal ──
+      // ── Reusable PDF modal ──
+      // Any element with [data-pdf-src] opens the modal with that PDF.
+      // Optional [data-pdf-title] sets the toolbar title text.
       (() => {
-        const modal = document.getElementById('resume-modal');
-        const openBtn = document.getElementById('resume-open');
-        if (!modal || !openBtn) return;
+        const modal = document.getElementById('pdf-modal');
+        if (!modal) return;
+        const titleEl = document.getElementById('pdf-modal-title');
+        const iframe = document.getElementById('pdf-modal-frame');
+        const downloadLink = document.getElementById('pdf-modal-download');
 
-        const open = () => {
+        const open = (src, title) => {
+          titleEl.textContent = title || 'PDF';
+          iframe.src = `${src}#toolbar=1&view=FitH`;
+          downloadLink.href = src;
           modal.hidden = false;
           requestAnimationFrame(() => modal.classList.add('open'));
           document.body.style.overflow = 'hidden';
@@ -435,11 +450,19 @@ const portraitVideos = [
         const close = () => {
           modal.classList.remove('open');
           document.body.style.overflow = '';
-          setTimeout(() => { modal.hidden = true; }, 250);
+          setTimeout(() => {
+            modal.hidden = true;
+            iframe.src = '';  // free the embed
+          }, 250);
         };
 
-        openBtn.addEventListener('click', open);
-        modal.querySelectorAll('[data-resume-close]').forEach((el) => {
+        document.querySelectorAll('[data-pdf-src]').forEach((trigger) => {
+          trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            open(trigger.dataset.pdfSrc, trigger.dataset.pdfTitle);
+          });
+        });
+        modal.querySelectorAll('[data-pdf-modal-close]').forEach((el) => {
           el.addEventListener('click', close);
         });
         document.addEventListener('keydown', (e) => {
