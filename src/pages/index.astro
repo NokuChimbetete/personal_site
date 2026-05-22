@@ -11,6 +11,7 @@ const featuredProjects = [
     thumbnail: '/images/project-1.jpg',
     url: '#',
     linkText: 'View Repo',
+    demo: 'ka0rcgv2EEM',
   },
   {
     title: 'Minerva Vibe Check',
@@ -20,6 +21,7 @@ const featuredProjects = [
     thumbnail: '/images/project-2.png',
     url: '#',
     linkText: 'View Demo',
+    demo: '1qH9jbBBak4',
   },
   {
     title: 'ByteFriend',
@@ -29,6 +31,7 @@ const featuredProjects = [
     thumbnail: '/images/project-3.png',
     url: '#',
     linkText: 'View Demo',
+    demo: 'JITQOjOLy4g',
   },
 ];
 
@@ -77,12 +80,19 @@ const typedPhrases = [
                 <div class="flip-card-front-label">{p.title}</div>
                 <span class="flip-card-hint">tap to see demo</span>
               </div>
-              <!-- Back: reserved for embedded demo video (coming soon) -->
+              <!-- Back: embedded YouTube demo (iframe lazy-injected on first flip) -->
               <div class="flip-card-back">
-                <div class="flip-card-back-placeholder">
-                  <span class="flip-card-back-placeholder-label">Demo video</span>
-                  <span class="flip-card-back-placeholder-sub">Coming soon</span>
-                </div>
+                {p.demo ? (
+                  <>
+                    <button type="button" class="flip-card-back-btn" aria-label="Back to thumbnail">← back</button>
+                    <div class="flip-card-iframe-slot" data-video-id={p.demo} data-title={`${p.title} demo`}></div>
+                  </>
+                ) : (
+                  <div class="flip-card-back-placeholder">
+                    <span class="flip-card-back-placeholder-label">Demo video</span>
+                    <span class="flip-card-back-placeholder-sub">Coming soon</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>

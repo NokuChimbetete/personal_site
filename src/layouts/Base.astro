@@ -279,11 +279,40 @@ const portraitVideos = [
         revealEls.forEach((el) => observer.observe(el));
       })();
 
-      // ── Flip cards (click to flip) ──
+      // ── Flip cards (click to flip, lazy-load YouTube iframes) ──
       document.querySelectorAll('.flip-card').forEach((card) => {
         card.addEventListener('click', (e) => {
           if (e.target.closest('.flip-card-back-link')) return;
-          card.classList.toggle('flipped');
+
+          // Back button on the back side: flip back AND stop the video
+          if (e.target.closest('.flip-card-back-btn')) {
+            e.stopPropagation();
+            card.classList.remove('flipped');
+            const iframe = card.querySelector('.flip-card-iframe');
+            if (iframe) {
+              iframe.src = 'about:blank';  // stops audio immediately
+              setTimeout(() => iframe.remove(), 500);  // remove after flip animation
+            }
+            return;
+          }
+
+          // Already flipped: don't toggle on iframe / empty-back clicks.
+          // Only the back-btn (handled above) can flip back to the front.
+          if (card.classList.contains('flipped')) return;
+
+          // Front → back: lazy-inject the YouTube iframe if there's a demo
+          const slot = card.querySelector('.flip-card-iframe-slot');
+          if (slot && slot.dataset.videoId && !card.querySelector('.flip-card-iframe')) {
+            const iframe = document.createElement('iframe');
+            iframe.className = 'flip-card-iframe';
+            iframe.src = `https://www.youtube.com/embed/${slot.dataset.videoId}?rel=0`;
+            iframe.title = slot.dataset.title || 'Demo video';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.setAttribute('allowfullscreen', '');
+            slot.insertAdjacentElement('afterend', iframe);
+          }
+
+          card.classList.add('flipped');
         });
       });
 
