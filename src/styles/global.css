@@ -545,11 +545,17 @@ h1, h2, h3, h4 {
 
 .flip-card-hint {
   position: absolute;
-  top: 0.9rem; right: 1rem;
-  font-size: 0.58rem;
-  letter-spacing: 0.12em;
+  top: 0.75rem; right: 0.75rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0.38rem 0.7rem;
+  border-radius: 2px;
   pointer-events: none;
 }
 
