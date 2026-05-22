@@ -7,12 +7,27 @@
   --surface:   #1e1c1a;
   --border:    #2c2824;
   --text:      #f0ece4;
+  --text-soft: #c8c4bc;
   --muted:     #8a7e70;
   --accent:    #d4a853;
   --accent2:   #c47a3a;
   --font:      'Arvo', Georgia, serif;
   --font-display: 'DM Serif Display', Georgia, serif;
   --ease:      cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Light theme overrides */
+:root[data-theme="light"] {
+  --bg:        #faf7f0;
+  --bg2:       #f0ece1;
+  --bg3:       #e6e0d1;
+  --surface:   #ddd6c2;
+  --border:    #c9c1ad;
+  --text:      #1c1812;
+  --text-soft: #3a3528;
+  --muted:     #7a6f5c;
+  --accent:    #9d7220;
+  --accent2:   #7d5510;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,7 +39,7 @@ a, button, label, select, summary,
 [type="button"], [type="submit"], [type="reset"], [role="button"],
 .flip-card, .flip-card-back-link, .blog-item,
 .sidebar-portrait, .sidebar-pill, .sidebar-nav-item,
-.sidebar-social a, .resume-modal-btn, .resume-modal-backdrop,
+.sidebar-social a, .pdf-modal-btn, .pdf-modal-backdrop,
 .project-link {
   cursor: url('/cursors/pointer.svg') 8 6, pointer;
 }
@@ -53,7 +68,7 @@ h1, h2, h3, h4 {
    ────────────────────────────────────────────── */
 .layout-grid {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 220px 1fr;
   max-width: 1180px;
   margin: 0 auto;
   min-height: 100vh;
@@ -70,7 +85,7 @@ h1, h2, h3, h4 {
   position: sticky;
   top: 0;
   height: 100vh;
-  padding: 3.5rem 2rem 2rem;
+  padding: 3rem 1.5rem 1.75rem;
   background: var(--bg);
   overflow-y: auto;
   scrollbar-width: thin;
@@ -81,15 +96,16 @@ h1, h2, h3, h4 {
 .sidebar-inner {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
   align-items: flex-start;
+  min-height: 100%;
 }
 
 /* Portrait carousel — compact circle */
 .sidebar-portrait {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   overflow: hidden;
   cursor: url('/cursors/pointer.svg') 8 6, pointer;
@@ -123,7 +139,7 @@ h1, h2, h3, h4 {
 
 .sidebar-name {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   font-weight: 400;
   font-style: normal;
   color: var(--text);
@@ -132,7 +148,7 @@ h1, h2, h3, h4 {
 }
 
 .sidebar-location {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--muted);
   font-style: italic;
 }
@@ -270,6 +286,36 @@ h1, h2, h3, h4 {
 }
 .sidebar-nav-item.active::before { transform: scaleY(1); }
 
+/* ── Theme toggle (sun / moon at sidebar bottom) ── */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;          /* pushes to bottom of sidebar */
+  padding-top: 1.5rem;
+  color: var(--muted);
+}
+.theme-toggle-btn {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  cursor: url('/cursors/pointer.svg') 8 6, pointer;
+  transition: color 0.2s var(--ease);
+}
+.theme-toggle-btn:hover { color: var(--accent); }
+.theme-toggle-btn.active { color: var(--text); }
+.theme-toggle-divider {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-family: var(--font);
+  user-select: none;
+}
+
 /* ──────────────────────────────────────────────
    Main content column
    ────────────────────────────────────────────── */
@@ -322,7 +368,7 @@ h1, h2, h3, h4 {
 
 .intro-bio {
   font-size: 1.05rem;
-  color: #c8c4bc;
+  color: var(--text-soft);
   line-height: 1.75;
   margin-bottom: 2.5rem;
 }
@@ -342,7 +388,7 @@ h1, h2, h3, h4 {
 
 .intro-list li {
   font-size: 1rem;
-  color: #c8c4bc;
+  color: var(--text-soft);
   line-height: 1.6;
   padding-left: 1.4rem;
   position: relative;
@@ -411,7 +457,7 @@ h1, h2, h3, h4 {
 
 .project-desc {
   font-size: 0.95rem;
-  color: #b0aca4;
+  color: var(--text-soft);
   line-height: 1.7;
   max-width: none;
 }
@@ -500,10 +546,11 @@ h1, h2, h3, h4 {
 .flip-card-hint {
   position: absolute;
   top: 0.9rem; right: 1rem;
-  font-size: 0.58rem;
-  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   pointer-events: none;
 }
 
@@ -638,9 +685,9 @@ h1, h2, h3, h4 {
 }
 
 /* ──────────────────────────────────────────────
-   Resume modal
+   PDF modal (reusable — resume, short stories, etc.)
    ────────────────────────────────────────────── */
-.resume-modal {
+.pdf-modal {
   position: fixed;
   inset: 0;
   z-index: 1000;
@@ -650,10 +697,10 @@ h1, h2, h3, h4 {
   opacity: 0;
   transition: opacity 0.25s var(--ease);
 }
-.resume-modal[hidden] { display: none; }
-.resume-modal.open { opacity: 1; }
+.pdf-modal[hidden] { display: none; }
+.pdf-modal.open { opacity: 1; }
 
-.resume-modal-backdrop {
+.pdf-modal-backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
@@ -662,7 +709,7 @@ h1, h2, h3, h4 {
   cursor: url('/cursors/pointer.svg') 8 6, pointer;
 }
 
-.resume-modal-content {
+.pdf-modal-content {
   position: relative;
   width: min(900px, 92vw);
   height: min(92vh, 1200px);
@@ -676,9 +723,9 @@ h1, h2, h3, h4 {
   transform: translateY(12px) scale(0.985);
   transition: transform 0.3s var(--ease);
 }
-.resume-modal.open .resume-modal-content { transform: translateY(0) scale(1); }
+.pdf-modal.open .pdf-modal-content { transform: translateY(0) scale(1); }
 
-.resume-modal-toolbar {
+.pdf-modal-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -688,20 +735,20 @@ h1, h2, h3, h4 {
   flex-shrink: 0;
 }
 
-.resume-modal-title {
+.pdf-modal-title {
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
-.resume-modal-actions {
+.pdf-modal-actions {
   display: flex;
   align-items: center;
   gap: 0.6rem;
 }
 
-.resume-modal-btn {
+.pdf-modal-btn {
   appearance: none;
   background: transparent;
   border: 1px solid var(--border);
@@ -715,19 +762,19 @@ h1, h2, h3, h4 {
   cursor: url('/cursors/pointer.svg') 8 6, pointer;
   transition: all 0.2s var(--ease);
 }
-.resume-modal-btn:hover {
+.pdf-modal-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
 }
 
-.resume-modal-close {
+.pdf-modal-close {
   font-size: 1.2rem;
   line-height: 1;
   padding: 0.25rem 0.6rem;
   letter-spacing: 0;
 }
 
-.resume-modal-frame {
+.pdf-modal-frame {
   flex: 1;
   width: 100%;
   border: 0;
@@ -740,7 +787,7 @@ h1, h2, h3, h4 {
 .prose {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: #c8c4bc;
+  color: var(--text-soft);
 }
 .prose p { margin-bottom: 1.75rem; }
 .prose h2 { font-size: 1.6rem; margin-top: 3rem; margin-bottom: 1rem; color: var(--text); }
