@@ -13,7 +13,23 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(gh pr:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(find C:/Users/nokuc/Desktop/nokuchimbetete/public -type f \\\\\\(-iname *.jpg -o -iname *.jpeg -o -iname *.png -o -iname *.gif -o -iname *.svg -o -iname *.webp -o -iname *.mp4 -o -iname *.webm -o -iname *.mov \\\\\\))",
+      "Bash(ffmpeg -version)",
+      "Bash(ffprobe -v quiet -print_format json -show_streams /c/Users/nokuc/Downloads/Pic_Videos/Video1.mp4)",
+      "Bash(ffprobe -v quiet -print_format json -show_streams /c/Users/nokuc/Downloads/Pic_Videos/Video2.MOV)",
+      "Bash(ffprobe -v quiet -print_format json -show_streams /c/Users/nokuc/Downloads/Pic_Videos/Video3.mp4)",
+      "Bash(ffmpeg -y -i \"/c/Users/nokuc/Downloads/Pic_Videos/Photo1\\(MainPhoto\\).jpg\" -vf \"scale=640:640:force_original_aspect_ratio=increase,crop=640:640\" -q:v 3 \"public/images/portrait-1.jpg\")",
+      "Bash(ffmpeg -y -i \"/c/Users/nokuc/Downloads/Pic_Videos/Photo2.jpg\" -vf \"scale=640:640:force_original_aspect_ratio=increase,crop=640:640\" -q:v 3 \"public/images/portrait-2.jpg\")",
+      "Bash(ffmpeg -y -i \"/c/Users/nokuc/Downloads/Pic_Videos/Photo3.jpg\" -vf \"scale=640:640:force_original_aspect_ratio=increase,crop=640:640\" -q:v 3 \"public/images/portrait-3.jpg\")",
+      "Bash(ffmpeg -y -i \"/c/Users/nokuc/Downloads/Pic_Videos/Photo4.jpg\" -vf \"scale=640:640:force_original_aspect_ratio=increase,crop=640:640\" -q:v 3 \"public/images/portrait-4.jpg\")",
+      "Bash(ffmpeg -y -i \"/c/Users/nokuc/Downloads/Pic_Videos/Video1.mp4\" -vf \"scale=640:640:force_original_aspect_ratio=increase,crop=640:640\" -c:v libx264 -crf 23 -preset medium -an -movflags +faststart \"/c/Users/nokuc/Desktop/nokuchimbetete/public/videos/portrait-1.mp4\")",
+      "Bash(ffmpeg -y -i \"/c/Users/nokuc/Downloads/Pic_Videos/Video2.MOV\" -vf \"scale=640:640:force_original_aspect_ratio=increase,crop=640:640\" -c:v libx264 -crf 23 -preset medium -an -movflags +faststart \"/c/Users/nokuc/Desktop/nokuchimbetete/public/videos/portrait-2.mp4\")",
+      "Bash(ffmpeg -y -i \"/c/Users/nokuc/Downloads/Pic_Videos/Video3.mp4\" -vf \"scale=640:640:force_original_aspect_ratio=increase,crop=640:640\" -c:v libx264 -crf 23 -preset medium -an -movflags +faststart \"/c/Users/nokuc/Desktop/nokuchimbetete/public/videos/portrait-3.mp4\")",
+      "Bash(ls -lah /c/Users/nokuc/Desktop/nokuchimbetete/public/images/portrait-*.jpg /c/Users/nokuc/Desktop/nokuchimbetete/public/videos/portrait-*.mp4)",
+      "Bash(git log:*)",
+      "Bash(npx vercel:*)",
+      "Bash(git pull *)"
     ]
   }
 }

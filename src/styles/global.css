@@ -459,6 +459,101 @@ nav {
    Delete (or comment out) the rule below to re-enable VIEW REPO / VIEW DEMO buttons. */
 .flip-card-back-link { display: none; }
 
+/* ── Resume modal ── */
+.resume-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease);
+}
+.resume-modal[hidden] { display: none; }
+.resume-modal.open { opacity: 1; }
+
+.resume-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.resume-modal-content {
+  position: relative;
+  width: min(900px, 92vw);
+  height: min(92vh, 1200px);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  transform: translateY(12px) scale(0.985);
+  transition: transform 0.3s var(--ease);
+}
+.resume-modal.open .resume-modal-content { transform: translateY(0) scale(1); }
+
+.resume-modal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  flex-shrink: 0;
+}
+
+.resume-modal-title {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.resume-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.resume-modal-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.9rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+.resume-modal-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.resume-modal-close {
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0.25rem 0.6rem;
+  letter-spacing: 0;
+}
+
+.resume-modal-frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #1a1a1a;
+}
+
 /* ── Blog list ── */
 .blog-list { display: flex; flex-direction: column; }
 
