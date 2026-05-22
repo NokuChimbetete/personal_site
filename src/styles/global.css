@@ -185,6 +185,51 @@ h1, h2, h3, h4 {
 .sidebar-social a:hover { color: var(--accent); }
 .sidebar-social svg { width: 18px; height: 18px; }
 
+/* Mobile-only header (name + hamburger). Hidden on desktop. */
+.sidebar-mobile-header { display: none; }
+.sidebar-mobile-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.sidebar-toggle {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0.5rem;
+  cursor: url('/cursors/pointer.svg') 8 6, pointer;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-toggle-bars {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 22px;
+  height: 14px;
+}
+.sidebar-toggle-bars span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transition: transform 0.3s var(--ease), opacity 0.2s var(--ease);
+  transform-origin: center;
+}
+/* Hamburger → X when menu is open */
+.sidebar.menu-open .sidebar-toggle-bars span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.sidebar.menu-open .sidebar-toggle-bars span:nth-child(2) {
+  opacity: 0;
+}
+.sidebar.menu-open .sidebar-toggle-bars span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
 /* Vertical section nav */
 .sidebar-nav {
   display: flex;
@@ -732,36 +777,55 @@ h1, h2, h3, h4 {
 .prose li { margin-bottom: 0.5rem; }
 
 /* ──────────────────────────────────────────────
-   Responsive — collapse sidebar to top on narrow screens
+   Responsive — collapsible mobile menu (hamburger pattern)
    ────────────────────────────────────────────── */
 @media (max-width: 900px) {
+  /* Sidebar becomes a sticky thin bar with collapsible content underneath */
   .sidebar {
-    position: static;
+    position: sticky;
+    top: 0;
     height: auto;
-    padding: 2rem 1.5rem 1.5rem;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 0;
     border-bottom: 1px solid var(--border);
+    z-index: 50;
+    background: var(--bg);
   }
-  .sidebar-inner {
-    flex-direction: row;
-    flex-wrap: wrap;
+
+  /* Always-visible mobile bar with name + hamburger */
+  .sidebar-mobile-header {
+    display: flex;
     align-items: center;
-    gap: 1rem 1.25rem;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
   }
-  .sidebar-portrait { width: 88px; height: 88px; }
-  .sidebar-identity { flex: 1; min-width: 0; }
-  .sidebar-name { font-size: 1.3rem; }
-  .sidebar-pills { flex-direction: row; flex-wrap: wrap; width: auto; }
-  .sidebar-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    border-left: 0;
-    padding-left: 0;
-    margin-top: 0;
+
+  /* Full sidebar contents hidden by default; revealed when .menu-open */
+  .sidebar-inner {
+    display: none;
+    padding: 0.5rem 1.25rem 1.75rem;
     width: 100%;
-    border-top: 1px solid var(--border);
-    padding-top: 1rem;
   }
-  .sidebar-nav-item::before { display: none; }
+  .sidebar.menu-open .sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  /* Hide the duplicate name in the inner identity block —
+     the mobile header already shows it. */
+  .sidebar-identity .sidebar-name { display: none; }
+
+  /* Slightly smaller portrait in the expanded menu */
+  .sidebar-portrait { width: 110px; height: 110px; }
+
+  .sidebar-pills { width: 100%; }
+  .sidebar-nav { width: 100%; }
+
+  /* Adjust main column padding on mobile */
+  .main-content { padding: 1.5rem 1.5rem 3rem; max-width: 100%; }
+
   .blog-item { grid-template-columns: 1fr; gap: 0.25rem; }
 }

@@ -46,7 +46,26 @@ const portraitVideos = [
     <div class="layout-grid">
       <!-- ── Sticky sidebar ── -->
       <aside class="sidebar">
-        <div class="sidebar-inner">
+        <!-- Mobile-only header: name + hamburger toggle -->
+        <div class="sidebar-mobile-header">
+          <span class="sidebar-mobile-name">Noku Chimbetete</span>
+          <button
+            type="button"
+            class="sidebar-toggle"
+            id="sidebar-toggle"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="sidebar-inner"
+          >
+            <span class="sidebar-toggle-bars" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+        </div>
+
+        <div class="sidebar-inner" id="sidebar-inner">
           <!-- Portrait carousel: alternating photos & videos on hover -->
           <div class="sidebar-portrait" id="portrait-wrap">
             {portraitPhotos.map((src, i) => (
@@ -315,6 +334,37 @@ const portraitVideos = [
           card.classList.add('flipped');
         });
       });
+
+      // ── Mobile sidebar toggle (hamburger ↔ X) ──
+      (() => {
+        const toggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        if (!toggle || !sidebar) return;
+
+        const setOpen = (open) => {
+          sidebar.classList.toggle('menu-open', open);
+          toggle.setAttribute('aria-expanded', String(open));
+          toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        };
+
+        toggle.addEventListener('click', () => {
+          setOpen(!sidebar.classList.contains('menu-open'));
+        });
+
+        // Close the menu when any in-page link is tapped (nav items, pills)
+        sidebar.querySelectorAll('.sidebar-nav-item, .sidebar-pill').forEach((el) => {
+          el.addEventListener('click', () => {
+            if (window.innerWidth <= 900) setOpen(false);
+          });
+        });
+
+        // Auto-close when resizing back up to desktop
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 900 && sidebar.classList.contains('menu-open')) {
+            setOpen(false);
+          }
+        });
+      })();
 
       // ── Resume modal ──
       (() => {
