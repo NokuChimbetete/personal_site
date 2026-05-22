@@ -10,6 +10,21 @@ const {
   title = 'Noku Chimbetete',
   description = 'Developer, writer, and artist.',
 } = Astro.props;
+
+// Portrait carousel media — alternating photos & videos.
+// Sequence: photo-0 → hover → video-0 → photo-1 → hover → video-1 → ... → last photo → wraps.
+// Always one more photo than videos (odd number of media elements).
+const portraitPhotos = [
+  '/images/portrait-1.jpg',
+  '/images/portrait-2.jpg',
+  '/images/portrait-3.jpg',
+  '/images/portrait-4.jpg',
+];
+const portraitVideos = [
+  '/videos/portrait-1.mp4',
+  '/videos/portrait-2.mp4',
+  '/videos/portrait-3.mp4',
+];
 ---
 
 <!doctype html>
@@ -20,7 +35,6 @@ const {
     <meta name="description" content={description} />
     <title>{title === 'Noku Chimbetete' ? title : `${title} — Noku Chimbetete`}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Preconnect to Google Fonts for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
@@ -29,23 +43,64 @@ const {
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <nav>
-      <a href="/" class="nav-logo">Noku</a>
-      <ul class="nav-links">
-        <li><a href="/#projects">Projects</a></li>
-        <li><a href="/#writing">Writing</a></li>
-      </ul>
-    </nav>
+    <div class="layout-grid">
+      <!-- ── Sticky sidebar ── -->
+      <aside class="sidebar">
+        <!-- Mobile-only header: name + hamburger toggle -->
+        <div class="sidebar-mobile-header">
+          <span class="sidebar-mobile-name">Noku Chimbetete</span>
+          <button
+            type="button"
+            class="sidebar-toggle"
+            id="sidebar-toggle"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="sidebar-inner"
+          >
+            <span class="sidebar-toggle-bars" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+        </div>
 
-    <main>
-      <slot />
-    </main>
+        <div class="sidebar-inner" id="sidebar-inner">
+          <!-- Portrait carousel: alternating photos & videos on hover -->
+          <div class="sidebar-portrait" id="portrait-wrap">
+            {portraitPhotos.map((src, i) => (
+              <img
+                class={`portrait-media portrait-photo${i === 0 ? ' active' : ''}`}
+                src={src}
+                alt={`Noku Chimbetete — photo ${i + 1}`}
+                draggable="false"
+              />
+            ))}
+            {portraitVideos.map((src, i) => (
+              <video
+                class="portrait-media portrait-video"
+                src={src}
+                muted
+                playsinline
+                preload={i === 0 ? 'auto' : 'metadata'}
+              />
+            ))}
+            <div class="sidebar-portrait-ring"></div>
+          </div>
 
-    <footer>
-      <div class="container">
-        <div class="footer-inner">
-          <p class="footer-copy">© {new Date().getFullYear()} Noku Chimbetete</p>
-          <ul class="footer-links">
+          <div class="sidebar-identity">
+            <h1 class="sidebar-name">Noku Chimbetete</h1>
+            <p class="sidebar-location">San Francisco, California</p>
+          </div>
+
+          <!-- Action pills (read writing + view resume) -->
+          <div class="sidebar-pills">
+            <a href="#writing" class="sidebar-pill">Read writing</a>
+            <button type="button" class="sidebar-pill" id="resume-open" aria-haspopup="dialog">View resume</button>
+          </div>
+
+          <!-- Social icons -->
+          <ul class="sidebar-social" aria-label="Social links">
             <li>
               <a href="https://github.com/NokuChimbetete/" target="_blank" rel="noopener" aria-label="GitHub">
                 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -62,8 +117,280 @@ const {
               </a>
             </li>
           </ul>
+
+          <!-- Vertical section nav with active indicator -->
+          <nav class="sidebar-nav" aria-label="Sections">
+            <a href="#intro" class="sidebar-nav-item" data-section="intro">Intro</a>
+            <a href="#projects" class="sidebar-nav-item" data-section="projects">Projects</a>
+            <a href="#writing" class="sidebar-nav-item" data-section="writing">Writing</a>
+          </nav>
         </div>
+      </aside>
+
+      <!-- Main content slot -->
+      <main class="main-content">
+        <slot />
+      </main>
+    </div>
+
+    <!-- ── Resume Modal ── -->
+    <div class="resume-modal" id="resume-modal" role="dialog" aria-modal="true" aria-label="Resume" hidden>
+      <div class="resume-modal-backdrop" data-resume-close></div>
+      <div class="resume-modal-content" role="document">
+        <div class="resume-modal-toolbar">
+          <span class="resume-modal-title">Resume — Noku Chimbetete</span>
+          <div class="resume-modal-actions">
+            <a href="/Noku_Chimbetete_Resume.pdf" download class="resume-modal-btn">Download PDF</a>
+            <button type="button" class="resume-modal-btn resume-modal-close" data-resume-close aria-label="Close">&times;</button>
+          </div>
+        </div>
+        <iframe
+          class="resume-modal-frame"
+          src="/Noku_Chimbetete_Resume.pdf#toolbar=1&view=FitH"
+          title="Noku Chimbetete Resume"
+          loading="lazy"
+        ></iframe>
       </div>
-    </footer>
+    </div>
+
+    <script>
+      // ── Portrait carousel state machine ──
+      // Sequence: photo₀ → video₀ → photo₁ → video₁ → ... → photoₙ → wrap
+      (() => {
+        const wrap = document.getElementById('portrait-wrap');
+        if (!wrap) return;
+
+        const photos = Array.from(wrap.querySelectorAll('.portrait-photo'));
+        const videos = Array.from(wrap.querySelectorAll('.portrait-video'));
+        const numVideos = videos.length;
+        const allMedia = [...photos, ...videos];
+
+        let step = 0;
+        let hovering = false;
+
+        const photoAt  = (s) => photos[s >> 1];
+        const videoAt  = (s) => videos[(s - 1) >> 1];
+        const isPhoto  = (s) => s % 2 === 0;
+        const lastStep = 2 * numVideos;
+
+        function show(step) {
+          allMedia.forEach(el => el.classList.remove('active'));
+          const target = isPhoto(step) ? photoAt(step) : videoAt(step);
+          if (target) target.classList.add('active');
+        }
+
+        function preloadNext(currentVideoIndex) {
+          const next = currentVideoIndex + 1;
+          if (next < numVideos && videos[next].preload !== 'auto') {
+            videos[next].preload = 'auto';
+            videos[next].load();
+          }
+        }
+
+        function enterHover() {
+          if (!isPhoto(step)) return;
+          if (step < lastStep) {
+            step++;
+            show(step);
+            const vid = videoAt(step);
+            vid.currentTime = 0;
+            vid.play().catch(() => {});
+            preloadNext((step - 1) >> 1);
+          } else {
+            step = 0;
+            show(step);
+            setTimeout(() => {
+              if (hovering && step === 0) enterHover();
+            }, 500);
+          }
+        }
+
+        function leaveHover() {
+          if (isPhoto(step)) return;
+          const vid = videoAt(step);
+          vid.pause();
+          vid.currentTime = 0;
+          step++;
+          if (step > lastStep) step = 0;
+          show(step);
+        }
+
+        wrap.addEventListener('mouseenter', () => { hovering = true;  enterHover(); });
+        wrap.addEventListener('mouseleave', () => { hovering = false; leaveHover(); });
+
+        wrap.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          if (isPhoto(step)) { hovering = true;  enterHover(); }
+          else               { hovering = false; leaveHover(); }
+        }, { passive: false });
+
+        videos.forEach((vid, i) => {
+          vid.addEventListener('ended', () => {
+            const expectedStep = 2 * i + 1;
+            if (step !== expectedStep) return;
+            step = expectedStep + 1;
+            if (step > lastStep) step = 0;
+            show(step);
+            if (hovering) enterHover();
+          });
+        });
+
+        photos.forEach(img => { img.loading = 'eager'; });
+        if (videos[0]) { videos[0].preload = 'auto'; videos[0].load(); }
+      })();
+
+      // ── Sidebar nav active state (scroll-driven) ──
+      // Iterates sections in document order and marks the last one whose top
+      // has passed the 35% line of the viewport. Reliable for tall sections.
+      (() => {
+        const navItems = document.querySelectorAll('.sidebar-nav-item');
+        if (!navItems.length) return;
+
+        const sections = Array.from(navItems)
+          .map(item => document.getElementById(item.dataset.section))
+          .filter(Boolean);
+
+        if (!sections.length) return;
+
+        const setActive = (id) => {
+          navItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.section === id);
+          });
+        };
+
+        const updateActive = () => {
+          // Bottom-of-page fallback: force the last section active
+          // (small sections at page end never cross the offset line otherwise).
+          const atBottom = window.innerHeight + window.scrollY
+                          >= document.documentElement.scrollHeight - 20;
+          if (atBottom) {
+            setActive(sections[sections.length - 1].id);
+            return;
+          }
+
+          const offset = window.innerHeight * 0.35;
+          let currentId = sections[0].id;
+          for (const sec of sections) {
+            if (sec.getBoundingClientRect().top - offset <= 0) {
+              currentId = sec.id;
+            }
+          }
+          setActive(currentId);
+        };
+
+        updateActive();
+        window.addEventListener('scroll', updateActive, { passive: true });
+        window.addEventListener('resize', updateActive, { passive: true });
+      })();
+
+      // ── Scroll reveal ──
+      (() => {
+        const revealEls = document.querySelectorAll('.reveal');
+        if (!revealEls.length) return;
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.01, rootMargin: '0px 0px 60px 0px' });
+        revealEls.forEach((el) => observer.observe(el));
+      })();
+
+      // ── Flip cards (click to flip, lazy-load YouTube iframes) ──
+      document.querySelectorAll('.flip-card').forEach((card) => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.flip-card-back-link')) return;
+
+          // Back button on the back side: flip back AND stop the video
+          if (e.target.closest('.flip-card-back-btn')) {
+            e.stopPropagation();
+            card.classList.remove('flipped');
+            const iframe = card.querySelector('.flip-card-iframe');
+            if (iframe) {
+              iframe.src = 'about:blank';  // stops audio immediately
+              setTimeout(() => iframe.remove(), 500);  // remove after flip animation
+            }
+            return;
+          }
+
+          // Already flipped: don't toggle on iframe / empty-back clicks.
+          // Only the back-btn (handled above) can flip back to the front.
+          if (card.classList.contains('flipped')) return;
+
+          // Front → back: lazy-inject the YouTube iframe if there's a demo
+          const slot = card.querySelector('.flip-card-iframe-slot');
+          if (slot && slot.dataset.videoId && !card.querySelector('.flip-card-iframe')) {
+            const iframe = document.createElement('iframe');
+            iframe.className = 'flip-card-iframe';
+            iframe.src = `https://www.youtube.com/embed/${slot.dataset.videoId}?rel=0`;
+            iframe.title = slot.dataset.title || 'Demo video';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.setAttribute('allowfullscreen', '');
+            slot.insertAdjacentElement('afterend', iframe);
+          }
+
+          card.classList.add('flipped');
+        });
+      });
+
+      // ── Mobile sidebar toggle (hamburger ↔ X) ──
+      (() => {
+        const toggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        if (!toggle || !sidebar) return;
+
+        const setOpen = (open) => {
+          sidebar.classList.toggle('menu-open', open);
+          toggle.setAttribute('aria-expanded', String(open));
+          toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        };
+
+        toggle.addEventListener('click', () => {
+          setOpen(!sidebar.classList.contains('menu-open'));
+        });
+
+        // Close the menu when any in-page link is tapped (nav items, pills)
+        sidebar.querySelectorAll('.sidebar-nav-item, .sidebar-pill').forEach((el) => {
+          el.addEventListener('click', () => {
+            if (window.innerWidth <= 900) setOpen(false);
+          });
+        });
+
+        // Auto-close when resizing back up to desktop
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 900 && sidebar.classList.contains('menu-open')) {
+            setOpen(false);
+          }
+        });
+      })();
+
+      // ── Resume modal ──
+      (() => {
+        const modal = document.getElementById('resume-modal');
+        const openBtn = document.getElementById('resume-open');
+        if (!modal || !openBtn) return;
+
+        const open = () => {
+          modal.hidden = false;
+          requestAnimationFrame(() => modal.classList.add('open'));
+          document.body.style.overflow = 'hidden';
+        };
+        const close = () => {
+          modal.classList.remove('open');
+          document.body.style.overflow = '';
+          setTimeout(() => { modal.hidden = true; }, 250);
+        };
+
+        openBtn.addEventListener('click', open);
+        modal.querySelectorAll('[data-resume-close]').forEach((el) => {
+          el.addEventListener('click', close);
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !modal.hidden) close();
+        });
+      })();
+    </script>
   </body>
 </html>
