@@ -32,6 +32,15 @@ const portraitVideos = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Apply stored theme before paint to avoid flash of dark mode -->
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        } catch (e) {}
+      })();
+    </script>
     <meta name="description" content={description} />
     <title>{title === 'Noku Chimbetete' ? title : `${title} — Noku Chimbetete`}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -124,6 +133,25 @@ const portraitVideos = [
             <a href="#projects" class="sidebar-nav-item" data-section="projects">Projects</a>
             <a href="#writing" class="sidebar-nav-item" data-section="writing">Writing</a>
           </nav>
+
+          <!-- Light / dark mode toggle (pushed to bottom of sidebar) -->
+          <div class="theme-toggle" role="group" aria-label="Theme">
+            <button type="button" class="theme-toggle-btn" data-theme-value="light" aria-label="Light mode">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"/>
+                <path d="M12 2v2"/><path d="M12 20v2"/>
+                <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+                <path d="M2 12h2"/><path d="M20 12h2"/>
+                <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+              </svg>
+            </button>
+            <span class="theme-toggle-divider" aria-hidden="true">/</span>
+            <button type="button" class="theme-toggle-btn" data-theme-value="dark" aria-label="Dark mode">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -334,6 +362,33 @@ const portraitVideos = [
           card.classList.add('flipped');
         });
       });
+
+      // ── Theme toggle (light / dark, persisted in localStorage) ──
+      (() => {
+        const buttons = document.querySelectorAll('.theme-toggle-btn');
+        if (!buttons.length) return;
+        const root = document.documentElement;
+        const STORAGE_KEY = 'theme';
+
+        const apply = (theme) => {
+          if (theme === 'light') root.setAttribute('data-theme', 'light');
+          else root.removeAttribute('data-theme');
+          buttons.forEach((b) => {
+            b.classList.toggle('active', b.dataset.themeValue === theme);
+            b.setAttribute('aria-pressed', b.dataset.themeValue === theme);
+          });
+          try { localStorage.setItem(STORAGE_KEY, theme); } catch (e) {}
+        };
+
+        // Initial state: read from storage, fall back to dark.
+        let current = 'dark';
+        try { current = localStorage.getItem(STORAGE_KEY) || 'dark'; } catch (e) {}
+        apply(current);
+
+        buttons.forEach((b) => {
+          b.addEventListener('click', () => apply(b.dataset.themeValue));
+        });
+      })();
 
       // ── Mobile sidebar toggle (hamburger ↔ X) ──
       (() => {
