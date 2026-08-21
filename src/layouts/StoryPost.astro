@@ -1,0 +1,93 @@
+---
+// Layout for short stories that are READ ON THE SITE (not PDFs).
+// Used by the markdown files in src/pages/writing/short-stories/.
+import Base from './Base.astro';
+
+const { frontmatter } = Astro.props;
+const meta = [frontmatter.date, frontmatter.readTime].filter(Boolean).join(' · ');
+---
+
+<Base title={frontmatter.title} description={frontmatter.description || frontmatter.title}>
+  <article class="story-page">
+    <div class="back-row">
+      <a href="/writing/short-stories" class="back-link">&larr; All short stories</a>
+    </div>
+
+    <header class="story-header">
+      <p class="story-eyebrow">Short Story</p>
+      <h1 class="story-title">{frontmatter.title}</h1>
+      {meta && <p class="story-meta">{meta}</p>}
+    </header>
+
+    <div class="prose story-prose">
+      <slot />
+    </div>
+
+    <footer class="story-footer">
+      <a href="/writing/short-stories" class="back-link">&larr; All short stories</a>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .story-page { padding-block: 1rem; }
+
+  .back-row { margin-bottom: 2.5rem; }
+  .back-link {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s var(--ease);
+  }
+  .back-link:hover { color: var(--accent); }
+
+  .story-header {
+    padding-bottom: 2.5rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .story-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .story-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 5.5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+
+  .story-meta {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    font-style: italic;
+  }
+
+  .story-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Fiction-tuned prose ──
+     Tighter than .prose so rapid dialogue lines read as an exchange
+     rather than as isolated blocks. */
+  .story-prose :global(p) { margin-bottom: 1.35rem; }
+
+  /* Section divider inside a story. */
+  .story-prose :global(.scene-break) {
+    text-align: center;
+    color: var(--muted);
+    letter-spacing: 0.5em;
+    margin-block: 2.75rem;
+  }
+</style>

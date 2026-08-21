@@ -1,14 +1,32 @@
 ---
 import Base from '../../layouts/Base.astro';
 
-// ✏️ ADD NEW SHORT STORIES HERE
-// Drop the PDF in /public/stories/ and add an entry below.
-// Clicking the title opens the PDF in the site-wide pdf-modal
-// (same look as the resume modal). If JS is disabled the href falls
-// back to the raw PDF.
-const stories: { title: string; pdf: string; date: string }[] = [
-  { title: 'Infinite Azure', pdf: '/stories/InfiniteAzure.pdf', date: 'May 2026' },
-];
+// ✏️ ADD NEW SHORT STORIES HERE — two kinds of entry:
+//
+//  1. READ ON THE SITE — copy one of the markdown files in
+//     /src/pages/writing/short-stories/, write the story, then add an entry
+//     with `href` pointing at its URL (the filename is the slug).
+//
+//  2. PDF — drop the file in /public/stories/ and add an entry with `pdf`.
+//     Clicking opens it in the site-wide pdf-modal (same look as the resume
+//     modal). If JS is disabled the href falls back to the raw PDF.
+//
+// Newest first: entries are sorted by `date` automatically, so a new story
+// can be added anywhere in the list below. (Undated entries sort to the end.)
+type Story = {
+  title: string;
+  href?: string;      // on-site story page
+  pdf?: string;       // PDF in /public/stories/
+  date?: string;
+  readTime?: string;
+};
+
+const stories: Story[] = [
+  { title: 'Stay', href: '/writing/short-stories/stay', date: 'July 2026', readTime: '3 min read' },
+  { title: 'Kunta & The Machine', href: '/writing/short-stories/kunta-and-the-machine', date: 'June 2026', readTime: '3 min read' },
+  { title: 'Moon Moles', href: '/writing/short-stories/moon-moles', date: 'May 2026', readTime: '4 min read' },
+  { title: 'Infinite Azure', pdf: '/stories/InfiniteAzure.pdf', date: 'March 2026' },
+].sort((a, b) => (Date.parse(b.date ?? '') || 0) - (Date.parse(a.date ?? '') || 0));
 ---
 
 <Base title="Short Stories" description="Short stories by Noku Chimbetete.">
@@ -20,19 +38,25 @@ const stories: { title: string; pdf: string; date: string }[] = [
 
     {stories.length > 0 ? (
       <ol class="story-list">
-        {stories.map((story) => (
-          <li>
-            <a
-              href={story.pdf}
-              class="story-link"
-              data-pdf-src={story.pdf}
-              data-pdf-title={story.title}
-            >
-              <span class="story-link-title">{story.title}</span>
-              <span class="story-link-meta">{story.date}</span>
-            </a>
-          </li>
-        ))}
+        {stories.map((story) => {
+          const isPdf = Boolean(story.pdf);
+          const meta = [isPdf ? 'PDF' : null, story.date, story.readTime]
+            .filter(Boolean)
+            .join(' · ');
+          return (
+            <li>
+              <a
+                href={isPdf ? story.pdf : story.href}
+                class="story-link"
+                data-pdf-src={isPdf ? story.pdf : undefined}
+                data-pdf-title={isPdf ? story.title : undefined}
+              >
+                <span class="story-link-title">{story.title}</span>
+                <span class="story-link-meta">{meta}</span>
+              </a>
+            </li>
+          );
+        })}
       </ol>
     ) : (
       <p class="coming-soon">Coming soon.</p>
@@ -69,7 +93,7 @@ const stories: { title: string; pdf: string; date: string }[] = [
     font-style: italic;
   }
 
-  /* ── Story list (numbered, click → opens pdf-modal) ── */
+  /* ── Story list (click → story page, or opens pdf-modal) ── */
   .story-list {
     list-style: none;
     padding: 0;
