@@ -286,13 +286,15 @@ h1, h2, h3, h4 {
 }
 .sidebar-nav-item.active::before { transform: scaleY(1); }
 
-/* ── Theme toggle (sun / moon at sidebar bottom) ── */
+/* ── Theme toggle (sun / moon, fixed to the top-right corner) ── */
 .theme-toggle {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.5rem;
+  z-index: 60;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  margin-top: auto;          /* pushes to bottom of sidebar */
-  padding-top: 1.5rem;
   color: var(--muted);
 }
 .theme-toggle-btn {
@@ -870,6 +872,9 @@ h1, h2, h3, h4 {
 
   .sidebar-pills { width: 100%; }
   .sidebar-nav { width: 100%; }
+
+  /* Keep the fixed toggle clear of the hamburger in the mobile top bar */
+  .theme-toggle { top: 1.1rem; right: 4.25rem; }
 
   /* Adjust main column padding on mobile */
   .main-content { padding: 1.5rem 1.5rem 3rem; max-width: 100%; }
